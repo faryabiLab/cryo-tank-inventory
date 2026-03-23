@@ -9,7 +9,7 @@ export const Header = () => {
       {/* Left side */}
       <div className="flex flex-col">
         <p className="text-[#38bdf8] text-[15px] font-bold">❄ CRYO TANK INVENTORY</p>
-        <p className="text-[#4a6080] text-[11px]">ALEX LAB * LIQUID NITROGEN STORAGE</p>
+        <p className="text-[#4a6080] text-[11px]">ALEX LAB · LIQUID NITROGEN STORAGE</p>
       </div>
       {/* Right side */}
       <div className="flex flex-row gap-5">
