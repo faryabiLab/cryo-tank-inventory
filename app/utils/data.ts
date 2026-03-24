@@ -1,6 +1,6 @@
-import type { Box, Vial, CellLine } from "./interfaces";
+import type { IBox, IVial, ICellLine } from "./interfaces";
 
-export const boxData: Box[] = [
+export const boxData: IBox[] = [
   {
     id: 'box_id_1',
     userId: 'user_id_1',
@@ -8,7 +8,6 @@ export const boxData: Box[] = [
     rows: 9,
     columns: 9,
     essential: true,
-    numVials: 3,
   },
   {
     id: 'box_id_2',
@@ -17,7 +16,6 @@ export const boxData: Box[] = [
     rows: 9,
     columns: 9,
     essential: true,
-    numVials: 0,
   },
   {
     id: 'box_id_3',
@@ -26,18 +24,17 @@ export const boxData: Box[] = [
     rows: 9,
     columns: 9,
     essential: false,
-    numVials: 0,
   }
 ];
 
-export const vialData: Vial[] = [
+export const vialData: IVial[] = [
   {
     id: 'vial_id_1',
     userId: 'user_id_1',
     boxId: 'box_id_1',
     cellLineId: 'cell_id_1',
     name: 'Vial 1',
-    position: 'A1',
+    position: {row: 1, col: 1},
   },
   {
     id: 'vial_id_2',
@@ -45,19 +42,19 @@ export const vialData: Vial[] = [
     boxId: 'box_id_1',
     cellLineId: 'cell_id_2',
     name: 'Vial 2',
-    position: 'A2',
+    position: {row: 1, col: 2},
   },
   {
     id: 'vial_id_3',
     userId: 'user_id_1',
-    boxId: 'box_id_1',
+    boxId: 'box_id_2',
     cellLineId: 'cell_id_3',
     name: 'Vial 3',
-    position: 'A3',
+    position: {row: 3, col: 1},
   },
 ];
 
-export const cellData: CellLine[] = [
+export const cellData: ICellLine[] = [
   {
     id: 'cell_id_1',
     userId: 'user_id_1',
