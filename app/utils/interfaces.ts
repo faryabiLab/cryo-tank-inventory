@@ -22,6 +22,8 @@ export interface IVial {
 export interface ICellLine {
   id: string;
   userId: string;
+  name: string;
+  description: string;
   category: string;
   color: string;
   tags: string[];
@@ -37,3 +39,5 @@ export type BoxGrid = GridCell[][];
 export type VialsById = Record<string, IVial>;
 export type CellLinesById = Record<string, ICellLine>;
 export type VialsByBoxId = Record<string, string[]>; // array of vial IDs
+
+export type Tab = "Inventory" | "Classification";

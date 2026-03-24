@@ -1,5 +1,5 @@
 import { boxData, cellData, vialData } from "~/utils/data";
-import { buildBoxGrid } from "~/utils/gridHelpers";
+import { buildBoxGrid } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 
 // Single Box Component
