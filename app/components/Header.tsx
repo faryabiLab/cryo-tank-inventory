@@ -1,4 +1,5 @@
 import type { Tab } from "~/utils/interfaces";
+import { boxData, vialData, cellData } from "~/utils/data";
 
 interface HeaderProps {
   activeTab: Tab;
@@ -26,15 +27,15 @@ export default function Header({
         {/* Metrics */}
         <div className="flex flex-row gap-5">
           <div className="flex flex-col items-center">
-            <p className="text-[#38bdf8] text-[18px] font-bold">40</p>
+            <p className="text-[#38bdf8] text-[18px] font-bold">{boxData.length.toLocaleString('es-US')}</p>
             <p className="text-[#4a6080] text-[10px]">BOXES</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-[#38bdf8] text-[18px] font-bold">2,326</p>
+            <p className="text-[#38bdf8] text-[18px] font-bold">{vialData.length.toLocaleString('es-US')}</p>
             <p className="text-[#4a6080] text-[10px]">VIALS</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-[#38bdf8] text-[18px] font-bold">40</p>
+            <p className="text-[#38bdf8] text-[18px] font-bold">{cellData.length.toLocaleString('es-US')}</p>
             <p className="text-[#4a6080] text-[10px]">CELL LINES</p>
           </div>
           <button

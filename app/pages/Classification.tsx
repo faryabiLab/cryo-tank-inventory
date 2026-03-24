@@ -5,8 +5,8 @@ import type { ICellLine } from "~/utils/interfaces";
 // Single Cell Line Component
 const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
   return (
-    <div className="flex flex-row bg-[#0f1624] border border-[#1e2d47] rounded-lg gap-2.5 pl-4 pr-16 py-2">
-      <div className="aspect-square h-3 mt-0.75 rounded-xs" style={{backgroundColor: cell.color || 'white'}} />
+    <div className="flex flex-row bg-[#0f1624] border border-[#1e2d47] rounded-lg gap-2.5 px-4 py-2">
+      <div className="aspect-square h-2.5 mt-1 rounded-xs" style={{backgroundColor: cell.color || 'white'}} />
       <div className="flex flex-col gap-1">
         <p className="text-[12px]">{cell.name}</p>
         <p className="text-[11px] text-[#8da0bb]">{cell.description}</p>
@@ -16,7 +16,7 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
               className="text-[10px] w-fit px-1" 
               style={{
                 backgroundColor: hexToRgba(tagColorMap[tag] || '#fffff', 0.12),
-                color: tagColorMap[tag] 
+                color: tagColorMap[tag]
               }}>
               {tag}
             </div>
@@ -46,7 +46,7 @@ const ClassificationPage = () => {
               {category}
             </div>
             {/* Cell Lines container */}
-            <div className="flex flex-row flex-wrap gap-2 mt-4">
+            <div className="grid gap-2 mt-4 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
               {cellLines.map((cell: ICellLine) => <CellItem key={cell.id} cell={cell} />)}
             </div>
           </div>

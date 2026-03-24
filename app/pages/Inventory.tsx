@@ -13,9 +13,11 @@ const BoxItem: React.FC<{box: IBox}> = ({box}) => {
 
   const boxGrid: BoxGrid =  buildBoxGrid(box, boxVials, cellLineMap);
 
+  // aspect-square
+
   return (
     <div className={`bg-[#0f1624] border ${box.essential ? "border-[#f59e0b40] hover:border-[#f59e0b73]" : 
-    "border-[#253552]"} w-1/3 aspect-square rounded-lg transition duration-150`}>
+    "border-[#253552]"} rounded-lg transition duration-150`}>
       {/* Header */}
       <div className="flex flex-row gap-2 items-center bg-[#161f30] px-3 py-2 border-b border-[#1e2d47]">
         <div className={`${box.essential ? 'bg-[#f59e0b1f] text-[#f59e0b]' : 'bg-[#38bdf81a] text-[#38bdf8]'} 
@@ -63,7 +65,7 @@ const InventoryPage = () => {
   return (
     <main className="flex items-center justify-center bg-[#080c14]">
       {/* Boxes Container */}
-      <div className="flex flex-row flex-wrap gap-8 w-full p-6">
+      <div className="grid gap-4 mt-4 grid-cols-[repeat(auto-fill,minmax(310px,1fr))] w-full p-6">
         {boxData.map((box: IBox) => <BoxItem key={box.id} box={box} />)}
       </div>
     </main>
