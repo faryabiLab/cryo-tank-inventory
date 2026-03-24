@@ -50,7 +50,7 @@ export const vialData: IVial[] = [
     boxId: 'box_id_1',
     cellLineId: 'd3fgnc3jiuhc8gh8349jcf34c3fhc8',
     name: 'Vial 3',
-    position: {row: 1, col: 3},
+    position: {row: 2, col: 1},
   },
   {
     id: 'vial_id_4',
