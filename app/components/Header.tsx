@@ -41,8 +41,9 @@ export default function Header({
           </div>
           <button
             onClick={handleEditMode}
-            className="flex items-center text-[#8da0bb] text-[12px] bg-[#161f30] border border-[#1e2d47] 
-            px-4 rounded-md cursor-pointer transition hover:text-[#f59e0b] hover:border-[#f59e0b] duration-150"
+            className={`flex items-center text-[#8da0bb] text-[12px] bg-[#161f30] border border-[#1e2d47] 
+            px-4 rounded-md cursor-pointer transition hover:text-[#f59e0b] hover:border-[#f59e0b] duration-150
+            ${isEditMode && "text-[#f59e0b] border-[#f59e0b]"}`}
           >
             {isEditMode ? "✕ Exit Edit" : "✎ Edit Mode"} 
           </button>
