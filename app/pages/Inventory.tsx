@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
 import { boxData, cellData, vialData } from "~/utils/data";
-import { buildBoxGrid } from "~/utils/helpers";
+import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
+// import searchIcon from "../assets/icons/search.svg";
+
+type filterButton = "All" | "Essential" | "Has Cells";
 
 // Single Box Component
 const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLineMap}) => {
@@ -10,11 +14,11 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLi
   const boxGrid: BoxGrid =  buildBoxGrid(box, boxVials, cellLineMap);
 
   return (
-    <div className={`bg-[#0f1624] border ${box.essential ? "border-[#f59e0b40] hover:border-[#f59e0b73]" : 
+    <div className={`bg-[#0f1624] border ${box.essential ? "border-[#f59e0b40] hover:border-[#f59e0b73]" :
     "border-[#253552]"} rounded-lg transition duration-150`}>
       {/* Header */}
       <div className="flex flex-row gap-2 items-center bg-[#161f30] px-3 py-2 border-b border-[#1e2d47] rounded-t-md">
-        <div className={`${box.essential ? 'bg-[#f59e0b1f] text-[#f59e0b]' : 'bg-[#38bdf81a] text-[#38bdf8]'} 
+        <div className={`${box.essential ? 'bg-[#f59e0b1f] text-[#f59e0b]' : 'bg-[#38bdf81a] text-[#38bdf8]'}
         text-[10px] flex justify-center items-center px-1.5 rounded-md`}>
           {box.essential ? "Essential Box" : 'Box'}
         </div>
@@ -29,7 +33,7 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLi
       <div className="p-2">
         {/* Column headers */}
         <div className="grid grid-cols-9 h-full w-full">
-          {Array.from({length: box.columns},(_,index) => 
+          {Array.from({length: box.columns},(_,index) =>
             <p key={`header-${index}-${box.id}`} className="text-[8px] text-[#4a6080] text-center">{index+1}</p>
           )}
         </div>
@@ -40,7 +44,7 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLi
               {row.map((cell, j) => (
                 <div
                   key={j}
-                  className={`aspect-square rounded-sm border m-px border-[#0f1929] transition 
+                  className={`aspect-square rounded-sm border m-px border-[#0f1929] transition
                   ${cell.cellLine && 'hover:scale-110'} duration-150`}
                   style={{
                     backgroundColor: cell.cellLine?.color ?? "#0b1220",
@@ -55,19 +59,72 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLi
   )
 }
 
-const ControlMenu: React.FC = () => {
+const ControlMenu: React.FC<{
+  allBoxes: IBox[],
+  searchValue: string,
+  setFilteredBoxes: (boxes: IBox[]) => void,
+  setSearchValue: (search: string) => void,
+}> = ({allBoxes, searchValue, setFilteredBoxes, setSearchValue}) => {
+  const [activeButton, setActiveButton] = useState<filterButton>("All");
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  // Update boxes displayed upon filter change
+  useEffect(() => {
+    let filtered: IBox[] = allBoxes;
+
+    // Box filters
+    if(activeButton === "Essential"){
+      filtered = filtered.filter((box: IBox) => box.essential === true);
+    } else if(activeButton === "Has Cells") {
+      filtered = filtered.filter((box: IBox) => vialData.some(vial => vial.boxId === box.id));
+    }
+
+    // Cell line search filter
+    setFilteredBoxes(filterBoxesBySearch(filtered, vialData, cellData, searchValue))
+  },[activeButton, searchValue]);
+
   return (
-    <div className="flex flex-row items-center flex-wrap gap-10 bg-[#0f1624b3] border-b border-[#1e2d47] py-3 px-6">
-      asd
+    <div className="flex flex-row items-center flex-wrap gap-4 bg-[#0f1624b3] border-b border-[#1e2d47] py-3 px-6">
+      {/* Search bar */}
+      {/* <img src="/icons/search.svg" alt="search-icon" className="w-6 h-6"/> */}
+      <input
+        type="search"
+        className="bg-[#161f30] text-[12px] w-64 h-8 rounded-md border border-[#1e2d47] px-4"
+        value={searchValue}
+        onChange={handleSearchChange}
+        placeholder="Search cell line"
+      />
+      {/* Box filter buttons */}
+      <button
+        className={`text-[12px] border px-3 py-1.5 rounded-md cursor-pointer transition duration-150
+          ${activeButton === "All" ? "bg-[#38bdf8] border-[#38bdf8] text-[#080c14] font-semibold"
+          : "bg-[#0f1624] text-[#8da0bb] border-[#1e2d47] hover:border-[#38bdf8] hover:text-[#38bdf8]"}`}
+        onClick={() => setActiveButton("All")}
+      >All</button>
+      <button
+        className={`text-[12px] border px-3 py-1.5 rounded-md cursor-pointer transition duration-150
+          ${activeButton === "Essential" ? "bg-[#f59e0b] border-[#f59e0b] text-[#080c14] font-semibold"
+          : "bg-[#0f1624] text-[#8da0bb] border-[#1e2d47] hover:border-[#38bdf8] hover:text-[#38bdf8]"}`}
+        onClick={() => setActiveButton("Essential")}
+      >⭐ Essential</button>
+      <button
+        className={`text-[12px] border px-3 py-1.5 rounded-md cursor-pointer transition duration-150
+          ${activeButton === "Has Cells" ? "bg-[#38bdf8] border-[#38bdf8] text-[#080c14] font-semibold"
+          : "bg-[#0f1624] text-[#8da0bb] border-[#1e2d47] hover:border-[#38bdf8] hover:text-[#38bdf8]"}`}
+        onClick={() => setActiveButton("Has Cells")}
+      >Has Cells</button>
     </div>
   );
 }
 
 const ColorKey: React.FC<{cellLineMap: CellLinesById}> = ({cellLineMap}) => {
   return (
-    <div className="flex flex-row items-center flex-wrap gap-3 border-b border-[#1e2d47] py-3 px-6">
+    <div className="flex flex-row items-center flex-wrap gap-3 border-b border-[#1e2d47] py-2 px-6">
       <p className="text-[10px] text-[#4a6080] uppercase">Color Key:</p>
-      {Object.entries(cellLineMap).map(([id, cell]) => 
+      {Object.entries(cellLineMap).map(([id, cell]) =>
         <div key={`color-map-${id}`} className="flex flex-row items-center gap-1">
           <div className="aspect-square h-2 rounded-xs" style={{backgroundColor: cell.color || 'white'}} />
           <p className="text-[10px] text-[#8da0bb]">{cell.name}</p>
@@ -77,18 +134,62 @@ const ColorKey: React.FC<{cellLineMap: CellLinesById}> = ({cellLineMap}) => {
   );
 }
 
+const BoxCount: React.FC<{
+  allBoxes: IBox[],
+  filteredBoxes: IBox[],
+  searchValue: string,
+}> = ({allBoxes, filteredBoxes, searchValue}) => {
+  return (
+    <div className="flex flex-row items-center flex-wrap gap-3 border-b border-[#1e2d47] py-2 px-6">
+      <p className="text-[11px] text-[#4a6080]">
+        Showing{' '}
+        <span className="text-[#38bdf8]">{filteredBoxes.length}</span>{' '}
+        of{' '}
+        <span className="text-[#38bdf8]">{allBoxes.length}</span>{' '}
+        boxes{' '}
+        {searchValue && (
+          <span>
+            · "<span className="text-[#38bdf8]">{searchValue}</span>"
+          </span>
+        )}
+      </p>
+    </div>
+  );
+}
+
 const InventoryPage = () => {
+  const [allBoxes, selectAllBoxes] = useState<IBox[]>([]);
+  const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+
+  useEffect(() => {
+    selectAllBoxes(boxData);
+    setFilteredBoxes(boxData);
+  },[]);
+
+  // Map of Cell Lines by ID
   const cellLineMap: CellLinesById = Object.fromEntries(
     cellData.map((cell) => [cell.id, cell])
   );
 
   return (
     <main className="flex flex-col bg-[#080c14]">
-      <ControlMenu />
+      {/* Menus */}
+      <ControlMenu
+        allBoxes={allBoxes}
+        searchValue={searchValue}
+        setFilteredBoxes={setFilteredBoxes}
+        setSearchValue={setSearchValue}
+      />
       <ColorKey cellLineMap={cellLineMap} />
-      {/* Boxes Container */}
+      <BoxCount
+        allBoxes={allBoxes}
+        filteredBoxes={filteredBoxes}
+        searchValue={searchValue}
+      />
+      {/* Boxes */}
       <div className="grid gap-4 mt-4 grid-cols-[repeat(auto-fill,minmax(310px,1fr))] w-full p-6">
-        {boxData.map((box: IBox) => <BoxItem key={box.id} box={box} cellLineMap={cellLineMap} />)}
+        {filteredBoxes.map((box: IBox) => <BoxItem key={box.id} box={box} cellLineMap={cellLineMap} />)}
       </div>
     </main>
   );

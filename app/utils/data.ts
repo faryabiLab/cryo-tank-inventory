@@ -15,7 +15,7 @@ export const boxData: IBox[] = [
     name: 'Box 2',
     rows: 9,
     columns: 9,
-    essential: true,
+    essential: false,
   },
   {
     id: 'box_id_3',
