@@ -12,6 +12,7 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLi
 
   const boxVials = vialData.filter((v: IVial) => v.boxId === box.id);
   const boxGrid: BoxGrid =  buildBoxGrid(box, boxVials, cellLineMap);
+  const fillPercentage: number = Math.ceil((boxVials.length * 100) / totalCells);
 
   return (
     <div className={`bg-[#0f1624] border ${box.essential ? "border-[#f59e0b40] hover:border-[#f59e0b73]" :
@@ -22,12 +23,24 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLi
         text-[10px] flex justify-center items-center px-1.5 rounded-md`}>
           {box.essential ? "Essential Box" : 'Box'}
         </div>
-        <p className="text-[12px] text-[#dde5f0]">{box.name}</p>
+        <p className="text-[12px] text-[#dde5f0]">📝 {box.name}</p>
         <p className="text-[11px] text-[#4a6080] ml-auto">{boxVials.length}/{totalCells}</p>
       </div>
       {/* Filled bar */}
-      <div>
-
+      <div className="flex flex-col p-2">
+        <div className="flex flex-row justify-between text-[10px]">
+          <p className="text-[#4a6080]">{fillPercentage}% filled</p>
+          <p className="text-[#38bdf8]">{boxVials.length} vials</p>
+        </div>
+        <div className="mt-0.5 h-0.5 rounded-xs bg-[#1c2840]">
+          <div 
+            className="h-full w-full" 
+            style={{
+              backgroundImage: 'linear-gradient(90deg, rgb(124, 58, 237), rgb(56, 189, 248))',
+              width: `${fillPercentage}%`
+            }} 
+          />
+        </div>
       </div>
       {/* Box grid */}
       <div className="p-2">
