@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router";
 import { boxData, cellData, vialData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
@@ -6,8 +7,12 @@ import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 
 type filterButton = "All" | "Essential" | "Has Cells";
 
+type OutletContextType = {
+  isEditMode: boolean;
+}
+
 // Single Box Component
-const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById}> = ({box, cellLineMap}) => {
+const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: boolean}> = ({box, cellLineMap, isEditMode}) => {
   const totalCells = box.rows * box.columns;
 
   const boxVials = vialData.filter((v: IVial) => v.boxId === box.id);
@@ -170,7 +175,9 @@ const BoxCount: React.FC<{
   );
 }
 
-const InventoryPage = () => {
+export default function InventoryPage() {
+  const { isEditMode } = useOutletContext<OutletContextType>();
+
   const [allBoxes, selectAllBoxes] = useState<IBox[]>([]);
   const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -202,10 +209,14 @@ const InventoryPage = () => {
       />
       {/* Boxes */}
       <div className="grid gap-4 mt-4 grid-cols-[repeat(auto-fill,minmax(310px,1fr))] w-full p-6">
-        {filteredBoxes.map((box: IBox) => <BoxItem key={box.id} box={box} cellLineMap={cellLineMap} />)}
+        {filteredBoxes.map((box: IBox) => 
+          <BoxItem 
+            key={box.id}
+            box={box}
+            cellLineMap={cellLineMap}
+            isEditMode={isEditMode}
+          />)}
       </div>
     </main>
   );
 }
-
-export default InventoryPage;

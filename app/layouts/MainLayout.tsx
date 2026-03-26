@@ -1,18 +1,18 @@
 import { useState } from "react";
-import type { Tab } from "~/utils/interfaces";
 import Header from "../components/Header";
-import InventoryPage from "~/pages/Inventory";
-import ClassificationPage from "~/pages/Classification";
+import { Outlet } from "react-router";
 
 export default function MainLayout() {
-  const [activeTab, setActiveTab] = useState<Tab>("Inventory");
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header
+        isEditMode={isEditMode}
+        setIsEditMode={setIsEditMode}
+      />
       <main className="flex-1">
-        {activeTab === "Inventory" && <InventoryPage />}
-        {activeTab === "Classification" && <ClassificationPage />}
+        <Outlet context={{ isEditMode }} />
       </main>
     </div>
   );

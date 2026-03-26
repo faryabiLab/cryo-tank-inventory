@@ -1,18 +1,19 @@
+import { NavLink } from "react-router";
 import type { Tab } from "~/utils/interfaces";
 import { boxData, vialData, cellData } from "~/utils/data";
 
 interface HeaderProps {
-  activeTab: Tab;
-  setActiveTab: (tab: Tab) => void;
+  isEditMode: boolean;
+  setIsEditMode: (value: boolean) => void;
 }
 
 export default function Header({
-  activeTab,
-  setActiveTab,
+  isEditMode,
+  setIsEditMode
 }: HeaderProps) {
 
   const handleEditMode = () => {
-    console.log("Edit mode");
+    setIsEditMode(!isEditMode);
   };
 
   return (
@@ -43,28 +44,28 @@ export default function Header({
             className="flex items-center text-[#8da0bb] text-[12px] bg-[#161f30] border border-[#1e2d47] 
             px-4 rounded-md cursor-pointer transition hover:text-[#f59e0b] hover:border-[#f59e0b] duration-150"
           >
-            ✎ Edit Mode
+            {isEditMode ? "✕ Exit Edit" : "✎ Edit Mode"} 
           </button>
         </div>
       </div>
       {/* Section 2 - Tab Navigation */}
       <div className="flex flex-row items-center bg-[#080c14] border-b border-[#1e2d47] pt-3 px-6 gap-6">
-        <button
-          className={`border-b-2 pb-2 cursor-pointer
-            ${activeTab === "Inventory" ? "border-[#38bdf8] text-[#38bdf8]" : 
+        <NavLink
+          to="/"
+          className={({isActive}) => `border-b-2 pb-2 cursor-pointer
+             ${isActive ? "border-[#38bdf8] text-[#38bdf8]" : 
             "border-[#080c14] text-[#8da0bb] hover:text-white"}`}
-          onClick={() => setActiveTab("Inventory")}
         >
           <p className="text-[13px]">📦 Inventory</p>
-        </button>
-        <button
-          className={`border-b-2 pb-2 cursor-pointer
-            ${activeTab === "Classification" ? "border-[#38bdf8] text-[#38bdf8]" : 
+        </NavLink>
+        <NavLink
+          to="/classification"
+          className={({isActive}) => `border-b-2 pb-2 cursor-pointer
+            ${isActive ? "border-[#38bdf8] text-[#38bdf8]" : 
             "border-[#080c14] text-[#8da0bb] hover:text-white"}`}
-          onClick={() => setActiveTab("Classification")}
         >
           <p className="text-[13px]">🔬 Cell Line Classification</p>
-        </button>
+        </NavLink>
       </div>
     </div>
   )
