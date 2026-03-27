@@ -39,20 +39,20 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
       {/* Header */}
       <div className="flex flex-row gap-2 items-center bg-[#161f30] px-3 py-2 border-b border-[#1e2d47] rounded-t-md">
         <div className={`${box.essential ? 'bg-[#f59e0b1f] text-[#f59e0b]' : 'bg-[#38bdf81a] text-[#38bdf8]'}
-        text-[10px] flex justify-center items-center px-1.5 rounded-md`}>
-          {box.essential ? "Essential Box" : 'Box'}
+        text-[10px] flex justify-center items-center px-1.5 py-0.5 rounded-md`}>
+          {box.essential ? "Essential" : 'Box'}
         </div>
         {/* Box Name (Editable) */}
         {isEditMode ? (
           <input
             type="text"
-            className="text-[12px] text-[#8da0bb] border not-focus:border-dashed border-[#38bdf84d] rounded-sm px-1.5
+            className="text-[11px] text-[#8da0bb] w-full border not-focus:border-dashed border-[#38bdf84d] rounded-sm px-1.5 py-0.5
               focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
             value={nameEdit}
             onChange={handleNameChange}
           />
         ) : (
-          <p className="text-[12px] text-[#dde5f0]">📝 {box.name}</p>
+          <p className="w-full text-[12px] text-[#dde5f0]">📝 {box.name}</p>
         )}
         <p className="text-[11px] text-[#4a6080] ml-auto">{boxVials.length}/{totalCells}</p>
       </div>
@@ -88,7 +88,8 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
                 <div
                   key={j}
                   className={`aspect-square rounded-sm border m-px border-[#0f1929] transition
-                  ${cell.cellLine && 'hover:scale-110'} duration-150`}
+                  ${cell.cellLine && 'hover:scale-110 cursor-pointer'} duration-150
+                  ${(!cell.cellLine && isEditMode) && 'border-dashed border-[#1a3050] hover:border-[#34d499] cursor-pointer'}`}
                   style={{
                     backgroundColor: cell.cellLine?.color ?? "#0b1220",
                   }}
@@ -262,7 +263,7 @@ export default function InventoryPage() {
           />
         )}
         {/* Create Box Button */}
-        {isEditMode && (
+        {(isEditMode && !searchValue) && (
           <button
             className="flex flex-col justify-center bg-[#0f1624] text-[#4a6080] text-[13px] gap-2 p-4
             border-2 border-dashed border-[#1e2d47] rounded-lg cursor-pointer
