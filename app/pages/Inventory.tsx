@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
+import { useModal } from "~/context/ModalContext";
 import { boxData, cellData, vialData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
@@ -218,6 +219,7 @@ const BoxCount: React.FC<{
 
 export default function InventoryPage() {
   const { isEditMode } = useOutletContext<OutletContextType>();
+  const { openModal } = useModal();
 
   const [allBoxes, selectAllBoxes] = useState<IBox[]>([]);
   const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
@@ -230,6 +232,7 @@ export default function InventoryPage() {
 
   const handleCreateBox = () => {
     console.log("Handle create box");
+    openModal("ADD_BOX");
   };
 
   // Map of Cell Lines by ID
