@@ -4,7 +4,7 @@ import { useBoxes } from "~/context/BoxesContext";
 import { useModal } from "~/context/ModalContext";
 import { useVials } from "~/context/VialsContext";
 import { fakeCellData } from "~/utils/data";
-import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
+import { buildBoxGrid, filterBoxesBySearch, getCoordinate } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
 
@@ -117,16 +117,27 @@ const BoxItem: React.FC<{
           {boxGrid.map((row, i) => (
             <div key={i}>
               {row.map((cell, j) => (
-                <div
-                  key={j}
-                  className={`aspect-square rounded-sm border m-px border-[#0f1929] transition
-                  ${cell.cellLine && 'hover:scale-110 cursor-pointer'} duration-150
-                  ${(!cell.cellLine && isEditMode) && 'border-dashed border-[#1a3050] hover:border-[#34d499] cursor-pointer'}`}
-                  style={{
-                    backgroundColor: cell.cellLine?.color ?? "#0b1220",
-                  }}
-                  onClick={() => isEditMode && handleAddVial(j+1, i+1)}
-                />
+                <div key={j} className="relative group">
+                  {/* Cell */}
+                  <div
+                    className={`aspect-square rounded-sm border m-px border-[#0f1929] transition
+                    ${cell.cellLine && 'hover:scale-110 cursor-pointer'} duration-150
+                    ${(!cell.cellLine && isEditMode) && 'border-dashed border-[#1a3050] hover:border-[#34d499] cursor-pointer'}`}
+                    style={{
+                      backgroundColor: cell.cellLine?.color ?? "#0b1220",
+                    }}
+                    onClick={() => isEditMode && handleAddVial(j+1, i+1)}
+                  />
+                  {/* Tooltip */}
+                  {cell.cellLine && (
+                    <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-1
+                      hidden group-hover:block
+                      whitespace-nowrap px-2 py-1 text-xs rounded bg-black text-white shadow-lg">
+                        <p className="text-center">{getCoordinate(j+1, i+1)}:</p>
+                        <p className="text-center">{cell.cellLine.name}</p>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           ))}

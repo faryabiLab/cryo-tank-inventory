@@ -82,3 +82,14 @@ export function filterBoxesBySearch(
   // Filter boxes
   return boxes.filter(box => boxIdsWithMatches.has(box.id));
 };
+
+/**
+ * Converts row and column numbers to coordinates
+ * @param {string} row - Row number (1-9)
+ * @param {string} col - Column number (1-9)
+ * @returns {string} coordinate (e.g. 'A1', 'C4', 'E9')
+ */
+export function getCoordinate(row: number, col: number): string {
+  const rowLetter: string = String.fromCharCode('A'.charCodeAt(0) + (row - 1));
+  return `${rowLetter}${col}`;
+}
