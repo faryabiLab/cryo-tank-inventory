@@ -1,6 +1,6 @@
 import { useModal } from "~/context/ModalContext";
 import AddBoxModal from "./AddBoxModal";
-// import EditBoxModal from "./EditBoxModal";
+import EditBoxModal from "./EditBoxModal";
 // import DeleteBoxModal from "./DeleteBoxModal";
 
 export default function ModalRoot() {
@@ -13,10 +13,10 @@ export default function ModalRoot() {
       {modal.type === "ADD_BOX" && (
         <AddBoxModal onClose={closeModal} />
       )}
-      {/* {modal.type === "EDIT_BOX" && (
+      {modal.type === "EDIT_BOX" && (
         <EditBoxModal data={modal.data} onClose={closeModal} />
       )}
-      {modal.type === "DELETE_BOX" && (
+      {/* {modal.type === "DELETE_BOX" && (
         <DeleteBoxModal data={modal.data} onClose={closeModal} />
       )} */}
     </div>

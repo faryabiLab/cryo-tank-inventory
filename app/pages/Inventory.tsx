@@ -7,7 +7,7 @@ import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
 
-type filterButton = "All" | "Essential" | "Has Cells";
+type filterButton = "All" | "Essential" | "Has Cells" | "Archived";
 
 type OutletContextType = {
   isEditMode: boolean;
@@ -15,7 +15,9 @@ type OutletContextType = {
 
 // Single Box Component
 const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: boolean}> = ({box, cellLineMap, isEditMode}) => {
-  const [nameEdit, setNameEdit] = useState<string>(box.name);
+  const { openModal } = useModal();
+  const { updateBox } = useBoxes();
+  // const [nameEdit, setNameEdit] = useState<string>(box.name);
 
   const totalCells = box.rows * box.columns;
   const boxVials = vialData.filter((v: IVial) => v.boxId === box.id);
@@ -23,16 +25,18 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
   const fillPercentage: number = Math.ceil((boxVials.length * 100) / totalCells);
 
   const handleMoreOptions = () => {
-    console.log("Open more options modal");
+    openModal("EDIT_BOX", box);
   }
 
   const handleDeleteBox = () => {
     console.log("Delete box");
   }
 
+  // TODO: Optimize, don't update on every letter change, but after losing focus
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNameEdit(event.target.value);
-    // TODO: Change box name
+    updateBox(box.id, {
+      name: event.target.value,
+    });
   };
 
   return (
@@ -50,7 +54,7 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
             type="text"
             className="text-[11px] text-[#8da0bb] w-full border not-focus:border-dashed border-[#38bdf84d] rounded-sm px-1.5 py-0.5
               focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
-            value={nameEdit}
+            value={box.name}
             onChange={handleNameChange}
           />
         ) : (
@@ -137,10 +141,14 @@ const ControlMenu: React.FC<{
     let filtered: IBox[] = allBoxes;
 
     // Box filters
-    if(activeButton === "Essential"){
-      filtered = filtered.filter((box: IBox) => box.essential === true);
+    if(activeButton === "All"){
+      filtered = filtered.filter((box: IBox) => box.archived === false);
+    } else if(activeButton === "Essential"){
+      filtered = filtered.filter((box: IBox) => box.essential === true && box.archived === false);
     } else if(activeButton === "Has Cells") {
-      filtered = filtered.filter((box: IBox) => vialData.some(vial => vial.boxId === box.id));
+      filtered = filtered.filter((box: IBox) => vialData.some(vial => vial.boxId === box.id && box.archived === false));
+    } else if(activeButton === "Archived") {
+      filtered = filtered.filter((box: IBox) => box.archived === true);
     }
 
     // Cell line search filter
@@ -177,6 +185,12 @@ const ControlMenu: React.FC<{
           : "bg-[#0f1624] text-[#8da0bb] border-[#1e2d47] hover:border-[#38bdf8] hover:text-[#38bdf8]"}`}
         onClick={() => setActiveButton("Has Cells")}
       >Has Cells</button>
+      <button
+        className={`text-[12px] border px-3 py-1.5 rounded-md cursor-pointer transition duration-150
+          ${activeButton === "Archived" ? "bg-[#38bdf8] border-[#38bdf8] text-[#080c14] font-semibold"
+          : "bg-[#0f1624] text-[#8da0bb] border-[#1e2d47] hover:border-[#38bdf8] hover:text-[#38bdf8]"}`}
+        onClick={() => setActiveButton("Archived")}
+      >🗑 Archived</button>
     </div>
   );
 }
@@ -227,7 +241,7 @@ export default function InventoryPage() {
   const [searchValue, setSearchValue] = useState<string>("");
 
   useEffect(() => {
-    setFilteredBoxes(boxes);
+    setFilteredBoxes(boxes.filter((box: IBox) => box.archived === false));
   },[boxes]);
 
   const handleCreateBox = () => {
@@ -251,7 +265,7 @@ export default function InventoryPage() {
       />
       <ColorKey cellLineMap={cellLineMap} />
       <BoxCount
-        allBoxes={boxes}
+        allBoxes={boxes.filter((box: IBox) => box.archived === false)}
         filteredBoxes={filteredBoxes}
         searchValue={searchValue}
       />

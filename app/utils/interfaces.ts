@@ -6,6 +6,7 @@ export interface IBox {
   rows: number;
   columns: number;
   essential: boolean;
+  archived: boolean;
 };
 
 // Vial. Derives from a cell line

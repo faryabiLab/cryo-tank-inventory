@@ -1,26 +1,22 @@
 import { useState } from "react";
 import { useBoxes } from "~/context/BoxesContext";
 
-export default function AddBoxModal({ onClose }: { onClose: () => void }) {
-  const [nameValue, setNameValue] = useState<string>("");
-  const [typeValue, setTypeValue] = useState<number>(0);
+export default function EditBoxModal({ data, onClose }: { data?: any; onClose: () => void }) {
+  const [nameValue, setNameValue] = useState<string>(data.name || "");
+  const [typeValue, setTypeValue] = useState<number>(Number(data.essential) || 0);
 
   const typeOptions: Record<string, number> = {
     "Main Tank": 0,
     "Essential Storage": 1,
   };
 
-  const { addBox } = useBoxes();
+  const { updateBox } = useBoxes();
 
-  const handleCreateBox = () => {
-    addBox({
+  const handleSave = () => {
+    updateBox(data.id, {
       name: nameValue,
       essential: Boolean(typeValue),
-      userId: 'user_id_1',
-      rows: 9,
-      columns: 9,
-      archived: false,
-    });
+    })
 
     onClose();
   };
@@ -37,7 +33,7 @@ export default function AddBoxModal({ onClose }: { onClose: () => void }) {
     <div className="bg-[#0f1624] rounded-xl w-105 max-w-[95vw] border border-[#253552]">
       {/* Header */}
       <div className="flex flex-row justify-between items-center px-4 py-3 border-b border-[#1e2d47] rounded-t-md">
-        <h3 className="text-[#dde5f0] text-[14px] font-semibold">Add new box</h3>
+        <h3 className="text-[#dde5f0] text-[14px] font-semibold">Edit box: {data.name}</h3>
         <button
           className="text-[#4a6080] text-[18px] mr-2 cursor-pointer hover:text-[#dde5f0] transition duration-150"
           onClick={onClose}
@@ -62,6 +58,7 @@ export default function AddBoxModal({ onClose }: { onClose: () => void }) {
             className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
             focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
             onChange={handleTypeChange}
+            value={typeValue}
           >
             {Object.entries(typeOptions).map(([label, value]) => 
               <option value={value}>{label}</option>
@@ -77,10 +74,10 @@ export default function AddBoxModal({ onClose }: { onClose: () => void }) {
           onClick={onClose}
         >Cancel</button>
         <button
-          className="bg-[#34d3991a] text-[#34d399] text-[13px] font-medium border border-[#34d3994d] rounded-md px-4 py-1.5
-          hover:border-[#34d399] hover:bg-[#34d39933] transition duration-150 cursor-pointer"
-          onClick={handleCreateBox}
-        >Add box</button>
+          className="bg-[#38bdf8] text-[#080c14] text-[13px] font-medium rounded-md px-4 py-1.5
+         hover:bg-[#7dd3fc] transition duration-150 cursor-pointer"
+          onClick={handleSave}
+        >Save</button>
       </div>
     </div>
   );

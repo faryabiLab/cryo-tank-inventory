@@ -8,6 +8,7 @@ export const fakeBoxData: IBox[] = [
     rows: 9,
     columns: 9,
     essential: true,
+    archived: false,
   },
   {
     id: 'box_id_2',
@@ -16,6 +17,7 @@ export const fakeBoxData: IBox[] = [
     rows: 9,
     columns: 9,
     essential: false,
+    archived: false,
   },
   {
     id: 'box_id_3',
@@ -24,6 +26,7 @@ export const fakeBoxData: IBox[] = [
     rows: 9,
     columns: 9,
     essential: false,
+    archived: false,
   }
 ];
 
