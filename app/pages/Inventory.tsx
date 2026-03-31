@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
+import { useBoxes } from "~/context/BoxesContext";
 import { useModal } from "~/context/ModalContext";
-import { boxData, cellData, vialData } from "~/utils/data";
+import { cellData, vialData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
@@ -220,15 +221,14 @@ const BoxCount: React.FC<{
 export default function InventoryPage() {
   const { isEditMode } = useOutletContext<OutletContextType>();
   const { openModal } = useModal();
+  const { boxes } = useBoxes();
 
-  const [allBoxes, selectAllBoxes] = useState<IBox[]>([]);
   const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
 
   useEffect(() => {
-    selectAllBoxes(boxData);
-    setFilteredBoxes(boxData);
-  },[]);
+    setFilteredBoxes(boxes);
+  },[boxes]);
 
   const handleCreateBox = () => {
     console.log("Handle create box");
@@ -244,14 +244,14 @@ export default function InventoryPage() {
     <main className="flex flex-col bg-[#080c14]">
       {/* Menus */}
       <ControlMenu
-        allBoxes={allBoxes}
+        allBoxes={boxes}
         searchValue={searchValue}
         setFilteredBoxes={setFilteredBoxes}
         setSearchValue={setSearchValue}
       />
       <ColorKey cellLineMap={cellLineMap} />
       <BoxCount
-        allBoxes={allBoxes}
+        allBoxes={boxes}
         filteredBoxes={filteredBoxes}
         searchValue={searchValue}
       />

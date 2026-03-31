@@ -1,6 +1,6 @@
 import type { IBox, IVial, ICellLine } from "./interfaces";
 
-export const boxData: IBox[] = [
+export const fakeBoxData: IBox[] = [
   {
     id: 'box_id_1',
     userId: 'user_id_1',
