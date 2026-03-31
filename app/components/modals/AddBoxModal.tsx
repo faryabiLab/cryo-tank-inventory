@@ -64,7 +64,7 @@ export default function AddBoxModal({ onClose }: { onClose: () => void }) {
             onChange={handleTypeChange}
           >
             {Object.entries(typeOptions).map(([label, value]) => 
-              <option key={value} value={value}>{label}</option>
+              <option key={label} value={value}>{label}</option>
             )}
           </select>
         </div>

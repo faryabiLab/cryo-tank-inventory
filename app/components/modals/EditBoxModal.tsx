@@ -61,7 +61,7 @@ export default function EditBoxModal({ data, onClose }: { data?: any; onClose: (
             value={typeValue}
           >
             {Object.entries(typeOptions).map(([label, value]) => 
-              <option value={value}>{label}</option>
+              <option key={label} value={value}>{label}</option>
             )}
           </select>
         </div>

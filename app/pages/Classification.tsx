@@ -1,4 +1,4 @@
-import { cellData, tagColorMap } from "~/utils/data";
+import { fakeCellData, tagColorMap } from "~/utils/data";
 import { hexToRgba } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
@@ -30,7 +30,7 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
 const ClassificationPage = () => {
 
   // Group Cell Lines by Category
-  const categoryMap = cellData.reduce((acc, cell) => {
+  const categoryMap = fakeCellData.reduce((acc, cell) => {
     if (!acc[cell.category]) acc[cell.category] = [];
     acc[cell.category].push(cell);
     return acc;
