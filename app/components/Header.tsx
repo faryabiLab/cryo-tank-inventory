@@ -1,6 +1,7 @@
 import { NavLink } from "react-router";
 import { useBoxes } from "~/context/BoxesContext";
-import { vialData, cellData } from "~/utils/data";
+import { useVials } from "~/context/VialsContext";
+import { cellData } from "~/utils/data";
 
 interface HeaderProps {
   isEditMode: boolean;
@@ -12,6 +13,7 @@ export default function Header({
   setIsEditMode,
 }: HeaderProps) {
   const { boxes } = useBoxes();
+  const { vials } = useVials();
 
   const handleEditMode = () => {
     setIsEditMode(!isEditMode);
@@ -33,7 +35,7 @@ export default function Header({
             <p className="text-[#4a6080] text-[10px]">BOXES</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-[#38bdf8] text-[18px] font-bold">{vialData.length.toLocaleString('es-US')}</p>
+            <p className="text-[#38bdf8] text-[18px] font-bold">{vials.length.toLocaleString('es-US')}</p>
             <p className="text-[#4a6080] text-[10px]">VIALS</p>
           </div>
           <div className="flex flex-col items-center">

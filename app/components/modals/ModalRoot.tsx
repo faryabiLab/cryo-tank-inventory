@@ -2,7 +2,8 @@ import { useModal } from "~/context/ModalContext";
 import AddBoxModal from "./AddBoxModal";
 import EditBoxModal from "./EditBoxModal";
 import ArchiveBoxModal from "./ArchiveBoxModal";
-// import DeleteBoxModal from "./DeleteBoxModal";
+import DeleteBoxModal from "./DeleteBoxModal";
+import AddVialModal from "./AddVialModal";
 
 export default function ModalRoot() {
   const { modal, closeModal } = useModal();
@@ -20,9 +21,12 @@ export default function ModalRoot() {
       {modal.type === "ARCHIVE_BOX" && (
         <ArchiveBoxModal data={modal.data} onClose={closeModal} />
       )}
-      {/* {modal.type === "DELETE_BOX" && (
+      {modal.type === "DELETE_BOX" && (
         <DeleteBoxModal data={modal.data} onClose={closeModal} />
-      )} */}
+      )}
+      {modal.type === "ADD_VIAL" && (
+        <AddVialModal data={modal.data} onClose={closeModal} />
+      )}
     </div>
   );
 }

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import { useBoxes } from "~/context/BoxesContext";
 import { useModal } from "~/context/ModalContext";
-import { cellData, vialData } from "~/utils/data";
+import { useVials } from "~/context/VialsContext";
+import { cellData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
@@ -14,22 +15,33 @@ type OutletContextType = {
 }
 
 // Single Box Component
-const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: boolean}> = ({box, cellLineMap, isEditMode}) => {
+const BoxItem: React.FC<{
+  box: IBox, 
+  allVials: IVial[],
+  cellLineMap: CellLinesById, 
+  isEditMode: boolean
+}> = ({box, allVials, cellLineMap, isEditMode}) => {
   const { openModal } = useModal();
   const { updateBox } = useBoxes();
 
   const totalCells = box.rows * box.columns;
-  const boxVials = vialData.filter((v: IVial) => v.boxId === box.id);
-  const boxGrid: BoxGrid =  buildBoxGrid(box, boxVials, cellLineMap);
+  const boxVials = allVials.filter((v: IVial) => v.boxId === box.id);
+  const boxGrid: BoxGrid = buildBoxGrid(box, boxVials, cellLineMap);
   const fillPercentage: number = Math.ceil((boxVials.length * 100) / totalCells);
 
   const handleMoreOptions = () => {
     openModal("EDIT_BOX", box);
   }
 
+  const handleRestoreBox = () => {
+    updateBox(box.id, {
+      archived: false,
+    });
+  }
+
   const handleDeleteBox = () => {
     if(box.archived) {
-      // TODO
+      openModal("DELETE_BOX", box);
     } else {
       openModal("ARCHIVE_BOX", box);
     }
@@ -41,6 +53,17 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
       name: event.target.value,
     });
   };
+
+  // TODO: Takes box info, coordinates, and opens vial creation modal
+  const handleAddVial = (row: number, col: number) => {
+    const boxInfo = {
+      boxId: box.id,
+      userId: box.userId,
+      row: row,
+      col: col,
+    }
+    openModal("ADD_VIAL", boxInfo);
+  }
 
   return (
     <div className={`bg-[#0f1624] border ${box.essential ? "border-[#f59e0b40] hover:border-[#f59e0b73]" :
@@ -102,6 +125,7 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
                   style={{
                     backgroundColor: cell.cellLine?.color ?? "#0b1220",
                   }}
+                  onClick={() => isEditMode && handleAddVial(j+1, i+1)}
                 />
               ))}
             </div>
@@ -111,11 +135,13 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
       {/* Edit buttons */}
       {isEditMode && (
         <div className="flex flex-row flex-wrap gap-1.5 px-3 py-2 border-t border-[#1e2d47]">
+          {/* Restore / Edit button */}
           <button
             className="text-[11px] text-[#8da0bb] border border-[#1e2d47] px-2 py-1 rounded-sm
               hover:text-[#38bdf8] hover:border-[#38bdf8] transition duration-300 cursor-pointer"
-            onClick={handleMoreOptions}
-          >✏️ More options</button>
+            onClick={box.archived ? handleRestoreBox : handleMoreOptions }
+          >{box.archived ? "🔄 Restore box" : "✏️ More options"}</button>
+          {/* Delete / Archive button */}
           <button
             className="text-[11px] text-[#8da0bb] border border-[#1e2d47] px-2 py-1 rounded-sm
               hover:text-[#f87171] hover:border-[#f87171] transition duration-300 cursor-pointer"
@@ -129,12 +155,13 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
 
 const ControlMenu: React.FC<{
   allBoxes: IBox[],
+  allVials: IVial[],
   activeButton: filterButton,
   searchValue: string,
   setFilteredBoxes: (boxes: IBox[]) => void,
   setActiveButton: (active: filterButton) => void,
   setSearchValue: (search: string) => void,
-}> = ({allBoxes, activeButton, searchValue, setFilteredBoxes, setActiveButton, setSearchValue}) => {
+}> = ({allBoxes, allVials, activeButton, searchValue, setFilteredBoxes, setActiveButton, setSearchValue}) => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -150,14 +177,14 @@ const ControlMenu: React.FC<{
     } else if(activeButton === "Essential"){
       filtered = filtered.filter((box: IBox) => box.essential === true && box.archived === false);
     } else if(activeButton === "Has Cells") {
-      filtered = filtered.filter((box: IBox) => vialData.some(vial => vial.boxId === box.id && box.archived === false));
+      filtered = filtered.filter((box: IBox) => allVials.some(vial => vial.boxId === box.id && box.archived === false));
     } else if(activeButton === "Archived") {
       filtered = filtered.filter((box: IBox) => box.archived === true);
     }
 
     // Cell line search filter
-    setFilteredBoxes(filterBoxesBySearch(filtered, vialData, cellData, searchValue))
-  },[activeButton, searchValue]);
+    setFilteredBoxes(filterBoxesBySearch(filtered, allVials, cellData, searchValue))
+  },[activeButton, searchValue, allBoxes]);
 
   return (
     <div className="flex flex-row items-center flex-wrap gap-4 bg-[#0f1624b3] border-b border-[#1e2d47] py-3 px-6">
@@ -217,21 +244,30 @@ const BoxCount: React.FC<{
   allBoxes: IBox[],
   filteredBoxes: IBox[],
   searchValue: string,
-}> = ({allBoxes, filteredBoxes, searchValue}) => {
+  activeButton: filterButton
+}> = ({allBoxes, filteredBoxes, searchValue, activeButton}) => {
   return (
     <div className="flex flex-row items-center flex-wrap gap-3 border-b border-[#1e2d47] py-2 px-6">
-      <p className="text-[11px] text-[#4a6080]">
-        Showing{' '}
-        <span className="text-[#38bdf8]">{filteredBoxes.length}</span>{' '}
-        of{' '}
-        <span className="text-[#38bdf8]">{allBoxes.length}</span>{' '}
-        boxes{' '}
-        {searchValue && (
-          <span>
-            · "<span className="text-[#38bdf8]">{searchValue}</span>"
-          </span>
-        )}
-      </p>
+      {activeButton !== "Archived" ? (
+        <p className="text-[11px] text-[#4a6080]">
+          Showing{' '}
+          <span className="text-[#38bdf8]">{filteredBoxes.length}</span>{' '}
+          of{' '}
+          <span className="text-[#38bdf8]">{allBoxes.length}</span>{' '}
+          boxes{' '}
+          {searchValue && (
+            <span>
+              · "<span className="text-[#38bdf8]">{searchValue}</span>"
+            </span>
+          )}
+        </p>
+      ) : (
+        <p className="text-[11px] text-[#4a6080]">
+          Showing{' '}
+          <span className="text-[#38bdf8]">{filteredBoxes.length}</span>{' '}
+          archived boxes
+        </p>
+      )}
     </div>
   );
 }
@@ -240,18 +276,18 @@ export default function InventoryPage() {
   const { isEditMode } = useOutletContext<OutletContextType>();
   const { openModal } = useModal();
   const { boxes } = useBoxes();
+  const { vials } = useVials();
 
   const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
   const [activeButton, setActiveButton] = useState<filterButton>("All");
   const [searchValue, setSearchValue] = useState<string>("");
 
-  useEffect(() => {
-    setFilteredBoxes(boxes.filter((box: IBox) => box.archived === false));
-  },[boxes]);
+  // useEffect(() => {
+  //   setFilteredBoxes(boxes.filter((box: IBox) => box.archived === false));
+  // },[boxes]);
 
   const handleCreateBox = () => {
     openModal("ADD_BOX");
-    console.log("ASD", );
   };
 
   // Map of Cell Lines by ID
@@ -266,6 +302,7 @@ export default function InventoryPage() {
       {/* Menus */}
       <ControlMenu
         allBoxes={boxes}
+        allVials={vials}
         activeButton={activeButton}
         searchValue={searchValue}
         setFilteredBoxes={setFilteredBoxes}
@@ -277,6 +314,7 @@ export default function InventoryPage() {
         allBoxes={boxes.filter((box: IBox) => box.archived === false)}
         filteredBoxes={filteredBoxes}
         searchValue={searchValue}
+        activeButton={activeButton}
       />
       {/* Boxes */}
       <div className="grid gap-4 mt-4 grid-cols-[repeat(auto-fill,minmax(310px,1fr))] w-full p-6">
@@ -284,6 +322,7 @@ export default function InventoryPage() {
           <BoxItem 
             key={box.id}
             box={box}
+            allVials={vials}
             cellLineMap={cellLineMap}
             isEditMode={isEditMode}
           />

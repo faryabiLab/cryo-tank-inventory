@@ -4,8 +4,8 @@ type ModalType =
   | "ADD_BOX"
   | "EDIT_BOX"
   | "ARCHIVE_BOX"
-  | "ADD_VIAL"
   | "DELETE_BOX"
+  | "ADD_VIAL"
   | null;
 
 type ModalState = {

@@ -30,7 +30,7 @@ export const fakeBoxData: IBox[] = [
   }
 ];
 
-export const vialData: IVial[] = [
+export const fakeVialData: IVial[] = [
   {
     id: 'vial_id_1',
     userId: 'user_id_1',
