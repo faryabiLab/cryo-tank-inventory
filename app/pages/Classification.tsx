@@ -12,7 +12,8 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
         <p className="text-[11px] text-[#8da0bb]">{cell.description}</p>
         <div className="flex flex-row flex-wrap gap-2">
           {cell?.tags.map((tag: string) => 
-            <div 
+            <div
+              key={`cell-id-${cell.id}-tag-${tag}`}
               className="text-[10px] w-fit px-1" 
               style={{
                 backgroundColor: hexToRgba(tagColorMap[tag] || '#fffff', 0.12),
