@@ -17,7 +17,6 @@ type OutletContextType = {
 const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: boolean}> = ({box, cellLineMap, isEditMode}) => {
   const { openModal } = useModal();
   const { updateBox } = useBoxes();
-  // const [nameEdit, setNameEdit] = useState<string>(box.name);
 
   const totalCells = box.rows * box.columns;
   const boxVials = vialData.filter((v: IVial) => v.boxId === box.id);
@@ -29,7 +28,11 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
   }
 
   const handleDeleteBox = () => {
-    console.log("Delete box");
+    if(box.archived) {
+      // TODO
+    } else {
+      openModal("ARCHIVE_BOX", box);
+    }
   }
 
   // TODO: Optimize, don't update on every letter change, but after losing focus
@@ -117,7 +120,7 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
             className="text-[11px] text-[#8da0bb] border border-[#1e2d47] px-2 py-1 rounded-sm
               hover:text-[#f87171] hover:border-[#f87171] transition duration-300 cursor-pointer"
             onClick={handleDeleteBox}
-          >🗑 Delete box</button>
+          >🗑 {box.archived ? "Delete" : "Archive"} box</button>
         </div>
       )}
     </div>
@@ -126,11 +129,12 @@ const BoxItem: React.FC<{box: IBox, cellLineMap: CellLinesById, isEditMode: bool
 
 const ControlMenu: React.FC<{
   allBoxes: IBox[],
+  activeButton: filterButton,
   searchValue: string,
   setFilteredBoxes: (boxes: IBox[]) => void,
+  setActiveButton: (active: filterButton) => void,
   setSearchValue: (search: string) => void,
-}> = ({allBoxes, searchValue, setFilteredBoxes, setSearchValue}) => {
-  const [activeButton, setActiveButton] = useState<filterButton>("All");
+}> = ({allBoxes, activeButton, searchValue, setFilteredBoxes, setActiveButton, setSearchValue}) => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -238,6 +242,7 @@ export default function InventoryPage() {
   const { boxes } = useBoxes();
 
   const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
+  const [activeButton, setActiveButton] = useState<filterButton>("All");
   const [searchValue, setSearchValue] = useState<string>("");
 
   useEffect(() => {
@@ -245,8 +250,8 @@ export default function InventoryPage() {
   },[boxes]);
 
   const handleCreateBox = () => {
-    console.log("Handle create box");
     openModal("ADD_BOX");
+    console.log("ASD", );
   };
 
   // Map of Cell Lines by ID
@@ -254,13 +259,17 @@ export default function InventoryPage() {
     cellData.map((cell) => [cell.id, cell])
   );
 
+  const showAddBoxButton = isEditMode && !searchValue && activeButton !== "Archived";
+
   return (
     <main className="flex flex-col bg-[#080c14]">
       {/* Menus */}
       <ControlMenu
         allBoxes={boxes}
+        activeButton={activeButton}
         searchValue={searchValue}
         setFilteredBoxes={setFilteredBoxes}
+        setActiveButton={setActiveButton}
         setSearchValue={setSearchValue}
       />
       <ColorKey cellLineMap={cellLineMap} />
@@ -280,7 +289,7 @@ export default function InventoryPage() {
           />
         )}
         {/* Create Box Button */}
-        {(isEditMode && !searchValue) && (
+        {showAddBoxButton && (
           <button
             className="flex flex-col justify-center bg-[#0f1624] text-[#4a6080] text-[13px] gap-2 p-4
             border-2 border-dashed border-[#1e2d47] rounded-lg cursor-pointer

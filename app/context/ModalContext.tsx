@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 type ModalType =
   | "ADD_BOX"
   | "EDIT_BOX"
+  | "ARCHIVE_BOX"
   | "ADD_VIAL"
   | "DELETE_BOX"
   | null;
