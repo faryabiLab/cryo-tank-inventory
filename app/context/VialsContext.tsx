@@ -25,7 +25,6 @@ export function VialsProvider({ children }: { children: React.ReactNode }) {
       ...vial,
       id: crypto.randomUUID(), // quick id
     };
-    console.log('NEW VIAL: ', newVial);
     setVials(prev => [...prev, newVial]);
   };
 

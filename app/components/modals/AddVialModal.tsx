@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useVials } from "~/context/VialsContext";
+import { fakeCellData } from "~/utils/data";
+import type { ICellLine } from "~/utils/interfaces";
 
 export default function AddVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
   const [nameValue, setNameValue] = useState<string>("");
+  const [cellIdValue, setCellIdValue] = useState<string>("");
+
+  const selectorOptions: ICellLine[] = fakeCellData.filter((cell) => cell.userId === data.userId);
 
   const { addVial } = useVials();
 
@@ -12,7 +17,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
       boxId: data.boxId,
       userId: data.userId,
       position: {row: Number(data.row), col: Number(data.col)},
-      cellLineId: "ojxhiu2n8y2jyubv3tf8t2639x7yh89j", // Replace by selector
+      cellLineId: cellIdValue || selectorOptions[0].id || "", // Replace by selector
     })
 
     onClose();
@@ -20,6 +25,10 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameValue(event.target.value);
+  };
+
+  const handleCellChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCellIdValue(event.target.value);
   };
 
   return (
@@ -44,6 +53,28 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
             value={nameValue}
             onChange={handleNameChange}
           />
+        </div>
+        {/* Cell Line Selector */}
+        <div className="flex flex-col gap-1">
+          <div className="flex flex-row items-center gap-2">
+            <label className="text-[12px] text-[#4a6080] uppercase">Cell Line</label>
+            <div className="aspect-square h-2 rounded-xs" 
+              style={{
+                backgroundColor: data.cellLineMap[cellIdValue || selectorOptions[0].id]?.color || 'white'
+              }} 
+            />
+          </div>
+          <select
+            className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+            focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
+            onChange={handleCellChange}
+          >
+            {selectorOptions.map((cell) => 
+              <option key={cell.id} value={cell.id}>
+                {cell.name}
+              </option>
+            )}
+          </select>
         </div>
       </div>
       {/* Buttons */}

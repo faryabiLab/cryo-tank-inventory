@@ -65,7 +65,7 @@ export const fakeVialData: IVial[] = [
   },
 ];
 
-export const cellData: ICellLine[] = [
+export const fakeCellData: ICellLine[] = [
   {
     id: 'ojxhiu2n8y2jyubv3tf8t2639x7yh89j',
     userId: 'user_id_1',

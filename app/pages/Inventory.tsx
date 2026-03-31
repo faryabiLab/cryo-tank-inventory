@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router";
 import { useBoxes } from "~/context/BoxesContext";
 import { useModal } from "~/context/ModalContext";
 import { useVials } from "~/context/VialsContext";
-import { cellData } from "~/utils/data";
+import { fakeCellData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
@@ -54,15 +54,15 @@ const BoxItem: React.FC<{
     });
   };
 
-  // TODO: Takes box info, coordinates, and opens vial creation modal
   const handleAddVial = (row: number, col: number) => {
-    const boxInfo = {
+    const data = {
+      cellLineMap: cellLineMap, 
       boxId: box.id,
       userId: box.userId,
       row: row,
       col: col,
     }
-    openModal("ADD_VIAL", boxInfo);
+    openModal("ADD_VIAL", data);
   }
 
   return (
@@ -183,7 +183,7 @@ const ControlMenu: React.FC<{
     }
 
     // Cell line search filter
-    setFilteredBoxes(filterBoxesBySearch(filtered, allVials, cellData, searchValue))
+    setFilteredBoxes(filterBoxesBySearch(filtered, allVials, fakeCellData, searchValue))
   },[activeButton, searchValue, allBoxes]);
 
   return (
@@ -282,17 +282,13 @@ export default function InventoryPage() {
   const [activeButton, setActiveButton] = useState<filterButton>("All");
   const [searchValue, setSearchValue] = useState<string>("");
 
-  // useEffect(() => {
-  //   setFilteredBoxes(boxes.filter((box: IBox) => box.archived === false));
-  // },[boxes]);
-
   const handleCreateBox = () => {
     openModal("ADD_BOX");
   };
 
   // Map of Cell Lines by ID
   const cellLineMap: CellLinesById = Object.fromEntries(
-    cellData.map((cell) => [cell.id, cell])
+    fakeCellData.map((cell) => [cell.id, cell])
   );
 
   const showAddBoxButton = isEditMode && !searchValue && activeButton !== "Archived";
