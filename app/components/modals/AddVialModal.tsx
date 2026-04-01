@@ -43,6 +43,12 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
           onClick={onClose}
         >x</button>
       </div>
+      {/* Sub-Header */}
+      <div className="flex flex-row flex-wrap gap-3 text-[#4a6080] text-[11px] px-4 pt-4">
+        <p>Box: <span className="text-[#38bdf8]">{data.boxName || ""}</span></p>
+        <p>·</p>
+        <p>Position: <span className="text-[#38bdf8]">{coordinate}</span></p>
+      </div>
       {/* Form */}
       <div className="flex flex-col gap-4 p-4 border-b border-[#1e2d47]">
         <div className="flex flex-col gap-1">

@@ -66,6 +66,7 @@ const BoxItem: React.FC<{
       cellLineId: vial?.cellLineId || "",
       cellLineMap: cellLineMap, 
       boxId: box.id,
+      boxName: box.name,
       userId: box.userId,
       row: row,
       col: col,

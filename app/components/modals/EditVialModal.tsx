@@ -39,11 +39,17 @@ export default function EditVialModal({ data, onClose }: { data?: any; onClose: 
     <div className="bg-[#0f1624] rounded-xl w-105 max-w-[95vw] border border-[#253552]">
       {/* Header */}
       <div className="flex flex-row justify-between items-center px-4 py-3 border-b border-[#1e2d47] rounded-t-md">
-        <h3 className="text-[#dde5f0] text-[14px] font-semibold">Edit vial {coordinate}</h3>
+        <h3 className="text-[#dde5f0] text-[14px] font-semibold">Edit vial at {coordinate}</h3>
         <button
           className="text-[#4a6080] text-[18px] mr-2 cursor-pointer hover:text-[#dde5f0] transition duration-150"
           onClick={onClose}
         >x</button>
+      </div>
+      {/* Sub-Header */}
+      <div className="flex flex-row flex-wrap gap-3 text-[#4a6080] text-[11px] px-4 pt-4">
+        <p>Box: <span className="text-[#38bdf8]">{data.boxName || ""}</span></p>
+        <p>·</p>
+        <p>Position: <span className="text-[#38bdf8]">{coordinate}</span></p>
       </div>
       {/* Form */}
       <div className="flex flex-col gap-4 p-4 border-b border-[#1e2d47]">
