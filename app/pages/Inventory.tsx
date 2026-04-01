@@ -23,10 +23,14 @@ const BoxItem: React.FC<{
 }> = ({box, allVials, cellLineMap, isEditMode}) => {
   const { openModal } = useModal();
   const { updateBox } = useBoxes();
+  const [boxGrid, setBoxGrid] = useState<BoxGrid | null>(null);
+
+  useEffect(() => {
+    setBoxGrid(buildBoxGrid(box, boxVials, cellLineMap));
+  }, [box, allVials]);
 
   const totalCells = box.rows * box.columns;
   const boxVials = allVials.filter((v: IVial) => v.boxId === box.id);
-  const boxGrid: BoxGrid = buildBoxGrid(box, boxVials, cellLineMap);
   const fillPercentage: number = Math.ceil((boxVials.length * 100) / totalCells);
 
   const handleMoreOptions = () => {
@@ -54,16 +58,20 @@ const BoxItem: React.FC<{
     });
   };
 
-  const handleAddVial = (row: number, col: number) => {
+  // Add vial on empty space or Edit existing vial
+  const handleCellSelect = (vial: IVial | undefined, row: number, col: number) => {
     const data = {
+      id: vial?.id || "",
+      name: vial?.name || "",
+      cellLineId: vial?.cellLineId || "",
       cellLineMap: cellLineMap, 
       boxId: box.id,
       userId: box.userId,
       row: row,
       col: col,
     }
-    openModal("ADD_VIAL", data);
-  }
+    openModal(vial ? "EDIT_VIAL" : "ADD_VIAL", data);
+  };
 
   return (
     <div className={`bg-[#0f1624] border ${box.essential ? "border-[#f59e0b40] hover:border-[#f59e0b73]" :
@@ -114,7 +122,7 @@ const BoxItem: React.FC<{
         </div>
         {/* Vials container */}
         <div className="grid grid-cols-9 h-full w-full">
-          {boxGrid.map((row, i) => (
+          {boxGrid && boxGrid.map((row, i) => (
             <div key={i}>
               {row.map((cell, j) => (
                 <div key={j} className="relative group">
@@ -126,7 +134,7 @@ const BoxItem: React.FC<{
                     style={{
                       backgroundColor: cell.cellLine?.color ?? "#0b1220",
                     }}
-                    onClick={() => isEditMode && handleAddVial(j+1, i+1)}
+                    onClick={() => isEditMode && handleCellSelect(cell.vial, j+1, i+1)}
                   />
                   {/* Tooltip */}
                   {cell.cellLine && (

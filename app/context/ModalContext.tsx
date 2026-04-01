@@ -6,6 +6,7 @@ type ModalType =
   | "ARCHIVE_BOX"
   | "DELETE_BOX"
   | "ADD_VIAL"
+  | "EDIT_VIAL"
   | null;
 
 type ModalState = {

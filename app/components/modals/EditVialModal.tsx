@@ -4,24 +4,26 @@ import { fakeCellData } from "~/utils/data";
 import { getCoordinate } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
-export default function AddVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
-  const [nameValue, setNameValue] = useState<string>("");
-  const [cellIdValue, setCellIdValue] = useState<string>("");
+export default function EditVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
+  const [nameValue, setNameValue] = useState<string>(data.name || "");
+  const [cellIdValue, setCellIdValue] = useState<string>(data.cellLineId || "");
 
-  const coordinate: string = getCoordinate(Number(data.row), Number(data.col)) || "";
+  const coordinate: string = getCoordinate(data.row, data.col) || "";
   const selectorOptions: ICellLine[] = fakeCellData.filter((cell) => cell.userId === data.userId);
 
-  const { addVial } = useVials();
+  const { updateVial, deleteVial } = useVials();
 
-  const handleCreateVial = () => {
-    addVial({
+  const handleSave = () => {
+    updateVial(data.id, {
       name: nameValue,
-      boxId: data.boxId,
-      userId: data.userId,
-      position: {row: Number(data.row), col: Number(data.col)},
-      cellLineId: cellIdValue || selectorOptions[0].id || "", // Replace by selector
+      cellLineId: cellIdValue || selectorOptions[0].id || "",
     })
 
+    onClose();
+  };
+
+  const handleRemove = () => {
+    deleteVial(data.id);
     onClose();
   };
 
@@ -37,7 +39,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
     <div className="bg-[#0f1624] rounded-xl w-105 max-w-[95vw] border border-[#253552]">
       {/* Header */}
       <div className="flex flex-row justify-between items-center px-4 py-3 border-b border-[#1e2d47] rounded-t-md">
-        <h3 className="text-[#dde5f0] text-[14px] font-semibold">Add vial at {coordinate}</h3>
+        <h3 className="text-[#dde5f0] text-[14px] font-semibold">Edit vial {coordinate}</h3>
         <button
           className="text-[#4a6080] text-[18px] mr-2 cursor-pointer hover:text-[#dde5f0] transition duration-150"
           onClick={onClose}
@@ -70,6 +72,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
             className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
             focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
             onChange={handleCellChange}
+            value={cellIdValue}
           >
             {selectorOptions.map((cell) => 
               <option key={cell.id} value={cell.id}>
@@ -82,15 +85,20 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
       {/* Buttons */}
       <div className="flex flex-row justify-end gap-2 p-4">
         <button
+          className="bg-[#f871711a] text-[#f87171] text-[13px] border border-[#f871714d] rounded-md px-4 py-1.5
+          hover:bg-[#f8717133] hover:border-[#f87171] transition duration-150 cursor-pointer"
+          onClick={handleRemove}
+        >Remove</button>
+        <button
           className="bg-[#161f30] text-[#8da0bb] text-[13px] border border-[#1e2d47] rounded-md px-4 py-1.5
           hover:text-[#dde5f0] hover:border-[#253552] transition duration-150 cursor-pointer"
           onClick={onClose}
         >Cancel</button>
         <button
-          className="bg-[#34d3991a] text-[#34d399] text-[13px] font-medium border border-[#34d3994d] rounded-md px-4 py-1.5
-          hover:border-[#34d399] hover:bg-[#34d39933] transition duration-150 cursor-pointer"
-          onClick={handleCreateVial}
-        >Add vial</button>
+          className="bg-[#38bdf8] text-[#080c14] text-[13px] font-medium border border-[#38bdf8] rounded-md px-4 py-1.5
+          hover:bg-[#7dd3fc] transition duration-150 cursor-pointer"
+          onClick={handleSave}
+        >Save</button>
       </div>
     </div>
   );
