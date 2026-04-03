@@ -10,9 +10,9 @@ export default function MainLayout() {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   return (
-    <ModalProvider>
-      <BoxesProvider>
-        <VialsProvider>
+    <BoxesProvider>
+      <VialsProvider>
+        <ModalProvider>
           <div className="min-h-screen flex flex-col">
             <Header
               isEditMode={isEditMode}
@@ -27,8 +27,8 @@ export default function MainLayout() {
             </main>
             <ModalRoot />
           </div>
-        </VialsProvider>
-      </BoxesProvider>
-    </ModalProvider>
+        </ModalProvider>
+      </VialsProvider>
+    </BoxesProvider>
   );
 }

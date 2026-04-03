@@ -27,7 +27,10 @@ export interface ICellLine {
   description: string;
   category: string;
   color: string;
-  tags: string[];
+  speciesTag?: SpeciesTag;
+  growthTag?: GrowthTag;
+  diseaseTag?: string;
+  tissueTag?: string;
 };
 
 export type GridCell = {
@@ -42,3 +45,6 @@ export type CellLinesById = Record<string, ICellLine>;
 export type VialsByBoxId = Record<string, string[]>; // array of vial IDs
 
 export type Tab = "Inventory" | "Classification";
+
+export type SpeciesTag = "human" | "mouse";
+export type GrowthTag = "suspension" | "adherent";

@@ -73,7 +73,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Human T-cell acute lymphoblastic leukemia',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#38bdf8',
-    tags: ['human', 'suspension', 'T-ALL', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-ALL',
+    tissueTag: 'T-cell',
   },
   {
     id: 'm9hxy3782hx98ju2bg8h2jy238nbxy2b36t7x',
@@ -82,7 +85,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Jurkat E6-1 human T-cell leukemia',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#34d399',
-    tags: ['human', 'suspension', 'T-cell leukemia', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-cell leukemia',
+    tissueTag: 'T-cell',
   },
   {
     id: 'd3fgnc3jiuhc8gh8349jcf34c3fhc8',
@@ -91,7 +97,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Human T-ALL cell line',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#e879f9',
-    tags: ['human', 'suspension', 'T-ALL', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-ALL',
+    tissueTag: 'T-cell',
   },
   {
     id: 'df45vbnm98nhg6f54d32d4fgb',
@@ -100,7 +109,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Human T-ALL (CUTLL-1 / Cuttl1)',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#c084fc',
-    tags: ['human', 'suspension', 'T-ALL', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-ALL',
+    tissueTag: 'T-cell',
   },
   {
     id: 'vbnm8yjhgfdvbnh4eg5v',
@@ -109,7 +121,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Human T-cell leukemia (DSMZ-certified)',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#fb923c',
-    tags: ['human', 'suspension', 'T-ALL', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-ALL',
+    tissueTag: 'T-cell',
   },
   {
     id: 'c6v56by5bd323erfdgvf',
@@ -118,7 +133,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Human T-ALL cell line',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#60a5fa',
-    tags: ['human', 'suspension', 'T-ALL', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-ALL',
+    tissueTag: 'T-cell',
   },
   {
     id: 'okcjhb8jfj28jdm9230',
@@ -127,7 +145,10 @@ export const fakeCellData: ICellLine[] = [
     description: 'Human T-cell leukemia/lymphoma',
     category: 'Human T-cell Leukemia / Lymphoma',
     color: '#86efac',
-    tags: ['human', 'suspension', 'T-cell lymphoma', 'T-cell'],
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'T-cell lymphoma',
+    tissueTag: 'T-cell',
   },
   {
     id: '2d2d32evrwft4g4gt4dx23c',
@@ -135,17 +156,48 @@ export const fakeCellData: ICellLine[] = [
     name: 'Granta519',
     description: 'Human mantle cell lymphoma (MCL)',
     category: 'Human B-cell / Mantle Cell Lymphoma',
-    color: '#91d62f',
-    tags: ['human', 'suspension', 'MCL', 'B-cell/MCL'],
+    color: '#a78bfa',
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'MCL',
+    tissueTag: 'B-cell/MCL',
+  },
+  {
+    id: 'i394jch7bcx8n2jx9eumm2ud3d',
+    userId: 'user_id_1',
+    name: 'Rec1',
+    description: 'Human mantle cell lymphoma',
+    category: 'Human B-cell / Mantle Cell Lymphoma',
+    color: '#f87171',
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'MCL',
+    tissueTag: 'B-cell/MCL',
+  },
+  {
+    id: 'mcjv2vc7nh289f2u3idjos',
+    userId: 'user_id_1',
+    name: 'SP49',
+    description: 'Human MCL cell line',
+    category: 'Human B-cell / Mantle Cell Lymphoma',
+    color: '#4ade80',
+    speciesTag: 'human',
+    growthTag: 'suspension',
+    diseaseTag: 'MCL',
+    tissueTag: 'B-cell/MCL',
   },
 ];
 
-export const tagColorMap: Record<string, string> = {
+export const speciesTagColorMap: Record<string, string> = {
   "human": "#7dd3fc",
-  "suspension": "#c4b5fd",
-  "T-cell": "#f9a8d4",
-  "T-ALL": "#fca5a5",
-  "T-cell leukemia": "#fca5a5",
-  "T-cell lymphoma": "#fca5a5",
+  "mouse": "#86efac",
 };
+
+export const growthTagColorMap: Record<string, string> = {
+  "suspension": "#c4b5fd",
+  "adherent": "#fdba74",
+};
+
+export const diseaseTagColor: string = "#fca5a5";
+export const tissueTagColor: string = "#f9a8d4";
 

@@ -1,4 +1,4 @@
-import { fakeCellData, tagColorMap } from "~/utils/data";
+import { fakeCellData, speciesTagColorMap, growthTagColorMap, diseaseTagColor, tissueTagColor } from "~/utils/data";
 import { hexToRgba } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
@@ -10,16 +10,50 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
       <div className="flex flex-col gap-1">
         <p className="text-[12px]">{cell.name}</p>
         <p className="text-[11px] text-[#8da0bb]">{cell.description}</p>
+        {/* Tags */}
         <div className="flex flex-row flex-wrap gap-2">
-          {cell?.tags.map((tag: string) => 
+          {/* Species Tag */}
+          {cell.speciesTag && (
             <div
-              key={`cell-id-${cell.id}-tag-${tag}`}
               className="text-[10px] w-fit px-1" 
               style={{
-                backgroundColor: hexToRgba(tagColorMap[tag] || '#fffff', 0.12),
-                color: tagColorMap[tag]
+                backgroundColor: hexToRgba(speciesTagColorMap[cell.speciesTag] || '#fffff', 0.12),
+                color: speciesTagColorMap[cell.speciesTag] || '#fffff'
               }}>
-              {tag}
+              {cell.speciesTag}
+            </div>
+          )}
+          {/* Growth Tag */}
+          {cell.growthTag && (
+            <div
+              className="text-[10px] w-fit px-1" 
+              style={{
+                backgroundColor: hexToRgba(growthTagColorMap[cell.growthTag] || '#fffff', 0.12),
+                color: growthTagColorMap[cell.growthTag] || '#fffff'
+              }}>
+              {cell.growthTag}
+            </div>
+          )}
+          {/* Disease Tag */}
+          {cell.diseaseTag && (
+            <div
+              className="text-[10px] w-fit px-1" 
+              style={{
+                backgroundColor: hexToRgba(diseaseTagColor || '#fffff', 0.12),
+                color: diseaseTagColor
+              }}>
+              {cell.diseaseTag}
+            </div>
+          )}
+          {/* Tissue Tag */}
+          {cell.tissueTag && (
+            <div
+              className="text-[10px] w-fit px-1" 
+              style={{
+                backgroundColor: hexToRgba(tissueTagColor || '#fffff', 0.12),
+                color: tissueTagColor
+              }}>
+              {cell.tissueTag}
             </div>
           )}
         </div>
@@ -29,7 +63,6 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
 }
 
 const ClassificationPage = () => {
-
   // Group Cell Lines by Category
   const categoryMap = fakeCellData.reduce((acc, cell) => {
     if (!acc[cell.category]) acc[cell.category] = [];
