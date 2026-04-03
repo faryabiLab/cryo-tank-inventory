@@ -5,7 +5,7 @@ import { useModal } from "~/context/ModalContext";
 import { useVials } from "~/context/VialsContext";
 import { fakeCellData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch, getCoordinate } from "~/utils/helpers";
-import type { BoxGrid, CellLinesById, IBox, IVial } from "~/utils/interfaces";
+import type { BoxGrid, CellLinesById, GridCell, IBox, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
 
 type filterButton = "All" | "Essential" | "Has Cells" | "Archived";
@@ -13,6 +13,59 @@ type filterButton = "All" | "Essential" | "Has Cells" | "Archived";
 type OutletContextType = {
   isEditMode: boolean;
 }
+
+// Single Cell Item. Can contain a vial
+const CellItem: React.FC<{
+  cell: GridCell,
+  row: number,
+  col: number,
+  isEditMode: boolean,
+  cellLineMap: CellLinesById,
+  box: IBox,
+}> = ({cell, row, col, isEditMode, cellLineMap, box}) => {
+  const { openModal } = useModal();
+
+  // Add vial on empty space or Edit existing vial
+  const handleCellSelect = (vial: IVial | undefined, row: number, col: number) => {
+    const data = {
+      id: vial?.id || "",
+      name: vial?.name || "",
+      cellLineId: vial?.cellLineId || "",
+      cellLineMap: cellLineMap, 
+      boxId: box.id,
+      boxName: box.name,
+      userId: box.userId,
+      row: row,
+      col: col,
+    }
+    openModal(vial ? "EDIT_VIAL" : "ADD_VIAL", data);
+  };
+
+  return (
+    <div className="relative group">
+      {/* Cell */}
+      <div
+        className={`aspect-square rounded-sm border m-px border-[#0f1929] transition
+        ${cell.cellLine && 'hover:scale-110 cursor-pointer'} duration-150
+        ${(!cell.cellLine && isEditMode) && 'border-dashed border-[#1a3050] hover:border-[#34d499] cursor-pointer'}`}
+        style={{
+          backgroundColor: cell.cellLine?.color ?? "#0b1220",
+        }}
+        onClick={() => isEditMode && handleCellSelect(cell.vial, row, col)}
+      />
+      {/* Tooltip */}
+      {(cell.cellLine && cell.vial) && (
+        <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-1
+          hidden group-hover:block
+          whitespace-nowrap px-2 py-1 text-xs rounded bg-black text-white shadow-lg">
+            <p className="text-center">{getCoordinate(row, col)}:</p>
+            <p className="text-center max-w-64 truncate">{cell.vial.name}</p>
+            <p className="text-center max-w-64 truncate">{cell.cellLine.name}</p>
+        </div>
+      )}
+    </div>
+  )
+};
 
 // Single Box Component
 const BoxItem: React.FC<{
@@ -56,22 +109,6 @@ const BoxItem: React.FC<{
     updateBox(box.id, {
       name: event.target.value,
     });
-  };
-
-  // Add vial on empty space or Edit existing vial
-  const handleCellSelect = (vial: IVial | undefined, row: number, col: number) => {
-    const data = {
-      id: vial?.id || "",
-      name: vial?.name || "",
-      cellLineId: vial?.cellLineId || "",
-      cellLineMap: cellLineMap, 
-      boxId: box.id,
-      boxName: box.name,
-      userId: box.userId,
-      row: row,
-      col: col,
-    }
-    openModal(vial ? "EDIT_VIAL" : "ADD_VIAL", data);
   };
 
   return (
@@ -126,27 +163,15 @@ const BoxItem: React.FC<{
           {boxGrid && boxGrid.map((row, i) => (
             <div key={i}>
               {row.map((cell, j) => (
-                <div key={j} className="relative group">
-                  {/* Cell */}
-                  <div
-                    className={`aspect-square rounded-sm border m-px border-[#0f1929] transition
-                    ${cell.cellLine && 'hover:scale-110 cursor-pointer'} duration-150
-                    ${(!cell.cellLine && isEditMode) && 'border-dashed border-[#1a3050] hover:border-[#34d499] cursor-pointer'}`}
-                    style={{
-                      backgroundColor: cell.cellLine?.color ?? "#0b1220",
-                    }}
-                    onClick={() => isEditMode && handleCellSelect(cell.vial, j+1, i+1)}
-                  />
-                  {/* Tooltip */}
-                  {cell.cellLine && (
-                    <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-1
-                      hidden group-hover:block
-                      whitespace-nowrap px-2 py-1 text-xs rounded bg-black text-white shadow-lg">
-                        <p className="text-center">{getCoordinate(j+1, i+1)}:</p>
-                        <p className="text-center">{cell.cellLine.name}</p>
-                    </div>
-                  )}
-                </div>
+                <CellItem 
+                  key={`${box.id}-${j}-${i}`}
+                  cell={cell}
+                  row={j+1}
+                  col={i+1}
+                  isEditMode={isEditMode}
+                  cellLineMap={cellLineMap}
+                  box={box}
+                />
               ))}
             </div>
           ))}

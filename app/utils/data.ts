@@ -148,3 +148,4 @@ export const tagColorMap: Record<string, string> = {
   "T-cell leukemia": "#fca5a5",
   "T-cell lymphoma": "#fca5a5",
 };
+
