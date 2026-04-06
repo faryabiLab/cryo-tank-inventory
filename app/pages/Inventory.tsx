@@ -59,8 +59,8 @@ const CellItem: React.FC<{
           hidden group-hover:block
           whitespace-nowrap px-2 py-1 text-xs rounded bg-black text-white shadow-lg">
             <p className="text-center">{getCoordinate(row, col)}:</p>
-            <p className="text-center max-w-64 truncate">{cell.vial.name}</p>
             <p className="text-center max-w-64 truncate">{cell.cellLine.name}</p>
+            <p className="text-center max-w-64 truncate">{cell.vial.name}</p>
         </div>
       )}
     </div>
