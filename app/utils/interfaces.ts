@@ -16,7 +16,8 @@ export interface IVial {
   boxId: string;
   cellLineId: string;
   name: string;
-  position: {row: number; col: number};
+  row: number;
+  column: number;
 };
 
 // Cell line

@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { useCellLines } from "~/context/CellLinesContext";
 import { useVials } from "~/context/VialsContext";
-import { fakeCellData } from "~/utils/data";
 import { getCoordinate } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
 export default function AddVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
+  const { cellLines } = useCellLines();
   const [nameValue, setNameValue] = useState<string>("");
   const [cellIdValue, setCellIdValue] = useState<string>("");
 
-  const coordinate: string = getCoordinate(Number(data.row), Number(data.col)) || "";
-  const selectorOptions: ICellLine[] = fakeCellData.filter((cell) => cell.userId === data.userId);
+  const coordinate: string = getCoordinate(Number(data.row), Number(data.column)) || "";
+  const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
 
   const { addVial } = useVials();
 
@@ -18,7 +19,8 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
       name: nameValue,
       boxId: data.boxId,
       userId: data.userId,
-      position: {row: Number(data.row), col: Number(data.col)},
+      row: Number(data.row),
+      column: Number(data.column),
       cellLineId: cellIdValue || selectorOptions[0].id || "", // Replace by selector
     })
 

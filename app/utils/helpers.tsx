@@ -22,8 +22,7 @@ export function buildBoxGrid(
     // Skip vials from other boxes
     if(vial.boxId !== box.id) continue;
 
-    const { row, col } = vial.position;
-    grid[col-1][row-1] = {
+    grid[vial.column-1][vial.row-1] = {
       vial,
       cellLine: cellLines[vial.cellLineId],
     };
@@ -86,10 +85,10 @@ export function filterBoxesBySearch(
 /**
  * Converts row and column numbers to coordinates
  * @param {string} row - Row number (1-9)
- * @param {string} col - Column number (1-9)
+ * @param {string} column - Column number (1-9)
  * @returns {string} coordinate (e.g. 'A1', 'C4', 'E9')
  */
-export function getCoordinate(row: number, col: number): string {
+export function getCoordinate(row: number, column: number): string {
   const rowLetter: string = String.fromCharCode('A'.charCodeAt(0) + (row - 1));
-  return `${rowLetter}${col}`;
+  return `${rowLetter}${column}`;
 }

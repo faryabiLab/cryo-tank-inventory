@@ -1,20 +1,22 @@
 import { useState } from "react";
+import { useCellLines } from "~/context/CellLinesContext";
 import { useVials } from "~/context/VialsContext";
-import { fakeCellData } from "~/utils/data";
 import { getCoordinate } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
 export default function EditVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
+  const { cellLines } = useCellLines();
   const [nameValue, setNameValue] = useState<string>(data.name || "");
   const [cellIdValue, setCellIdValue] = useState<string>(data.cellLineId || "");
 
-  const coordinate: string = getCoordinate(data.row, data.col) || "";
-  const selectorOptions: ICellLine[] = fakeCellData.filter((cell) => cell.userId === data.userId);
+  const coordinate: string = getCoordinate(data.row, data.column) || "";
+  const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
 
   const { updateVial, deleteVial } = useVials();
 
   const handleSave = () => {
     updateVial(data.id, {
+      ...data,
       name: nameValue,
       cellLineId: cellIdValue || selectorOptions[0].id || "",
     })

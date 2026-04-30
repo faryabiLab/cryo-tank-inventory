@@ -1,12 +1,14 @@
-import { createContext, useContext, useState } from "react";
-import { fakeBoxData } from "~/utils/data";
+import { createContext, useContext, useState, useEffect } from "react";
+import { boxesApi } from "~/api/boxes";
 import type { IBox } from "~/utils/interfaces";
 
 type BoxesContextType = {
   boxes: IBox[];
-  addBox: (box: Omit<IBox, "id">) => void;
-  updateBox: (id: string, updates: Partial<IBox>) => void;
-  deleteBox: (id: string) => void;
+  loading: boolean;
+  error: string | null;
+  addBox: (box: Omit<IBox, "id">) => Promise<void>;
+  updateBox: (id: string, updates: Partial<IBox>) => Promise<void>;
+  deleteBox: (id: string) => Promise<void>;
 };
 
 const BoxesContext = createContext<BoxesContextType | null>(null);
@@ -18,28 +20,35 @@ export const useBoxes = () => {
 };
 
 export function BoxesProvider({ children }: { children: React.ReactNode }) {
-  const [boxes, setBoxes] = useState<IBox[]>(fakeBoxData);
+  const [boxes, setBoxes] = useState<IBox[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const addBox = (box: Omit<IBox, "id">) => {
-    const newBox: IBox = {
-      ...box,
-      id: crypto.randomUUID(), // quick id
-    };
+  // Load all boxes on mount
+  useEffect(() => {
+    boxesApi.getAll()
+      .then(setBoxes)
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const addBox = async (box: Omit<IBox, "id">) => {
+    const newBox = await boxesApi.create(box);
     setBoxes(prev => [...prev, newBox]);
   };
 
-  const updateBox = (id: string, updates: Partial<IBox>) => {
-    setBoxes(prev =>
-      prev.map(box => (box.id === id ? { ...box, ...updates } : box))
-    );
+  const updateBox = async (id: string, updates: Partial<IBox>) => {
+    const updated = await boxesApi.update(id, updates);
+    setBoxes(prev => prev.map(box => box.id === id ? updated : box));
   };
 
-  const deleteBox = (id: string) => {
+  const deleteBox = async (id: string) => {
+    await boxesApi.delete(id);
     setBoxes(prev => prev.filter(box => box.id !== id));
   };
 
   return (
-    <BoxesContext.Provider value={{ boxes, addBox, updateBox, deleteBox }}>
+    <BoxesContext.Provider value={{ boxes, loading, error, addBox, updateBox, deleteBox }}>
       {children}
     </BoxesContext.Provider>
   );

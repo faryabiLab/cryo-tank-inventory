@@ -1,12 +1,14 @@
-import { createContext, useContext, useState } from "react";
-import { fakeVialData } from "~/utils/data";
+import { createContext, useContext, useState, useEffect } from "react";
+import { vialsApi } from "~/api/vials";
 import type { IVial } from "~/utils/interfaces";
 
 type VialsContextType = {
   vials: IVial[];
-  addVial: (vial: Omit<IVial, "id">) => void;
-  updateVial: (id: string, updates: Partial<IVial>) => void;
-  deleteVial: (id: string) => void;
+  loading: boolean;
+  error: string | null;
+  addVial: (vial: Omit<IVial, "id">) => Promise<void>;
+  updateVial: (id: string, updates: Partial<IVial>) => Promise<void>;
+  deleteVial: (id: string) => Promise<void>;
 };
 
 const VialsContext = createContext<VialsContextType | null>(null);
@@ -18,28 +20,34 @@ export const useVials = () => {
 };
 
 export function VialsProvider({ children }: { children: React.ReactNode }) {
-  const [vials, setVials] = useState<IVial[]>(fakeVialData);
+  const [vials, setVials] = useState<IVial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const addVial = (vial: Omit<IVial, "id">) => {
-    const newVial: IVial = {
-      ...vial,
-      id: crypto.randomUUID(), // quick id
-    };
+  useEffect(() => {
+    vialsApi.getAll()
+      .then(setVials)
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const addVial = async (vial: Omit<IVial, "id">) => {
+    const newVial = await vialsApi.create(vial);
     setVials(prev => [...prev, newVial]);
   };
 
-  const updateVial = (id: string, updates: Partial<IVial>) => {
-    setVials(prev =>
-      prev.map(vial => (vial.id === id ? { ...vial, ...updates } : vial))
-    );
+  const updateVial = async (id: string, updates: Partial<IVial>) => {
+    const updated = await vialsApi.update(id, updates);
+    setVials(prev => prev.map(vial => vial.id === id ? updated : vial));
   };
 
-  const deleteVial = (id: string) => {
+  const deleteVial = async (id: string) => {
+    await vialsApi.delete(id);
     setVials(prev => prev.filter(vial => vial.id !== id));
   };
 
   return (
-    <VialsContext.Provider value={{ vials, addVial, updateVial, deleteVial }}>
+    <VialsContext.Provider value={{ vials, loading, error, addVial, updateVial, deleteVial }}>
       {children}
     </VialsContext.Provider>
   );

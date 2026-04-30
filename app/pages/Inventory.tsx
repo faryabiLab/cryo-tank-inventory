@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import { useBoxes } from "~/context/BoxesContext";
+import { useCellLines } from "~/context/CellLinesContext";
 import { useModal } from "~/context/ModalContext";
 import { useVials } from "~/context/VialsContext";
 import { fakeCellData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch, getCoordinate } from "~/utils/helpers";
-import type { BoxGrid, CellLinesById, GridCell, IBox, IVial } from "~/utils/interfaces";
+import type { BoxGrid, CellLinesById, GridCell, IBox, ICellLine, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
 
 type filterButton = "All" | "Essential" | "Has Cells" | "Archived";
@@ -18,15 +19,15 @@ type OutletContextType = {
 const CellItem: React.FC<{
   cell: GridCell,
   row: number,
-  col: number,
+  column: number,
   isEditMode: boolean,
   cellLineMap: CellLinesById,
   box: IBox,
-}> = ({cell, row, col, isEditMode, cellLineMap, box}) => {
+}> = ({cell, row, column, isEditMode, cellLineMap, box}) => {
   const { openModal } = useModal();
 
   // Add vial on empty space or Edit existing vial
-  const handleCellSelect = (vial: IVial | undefined, row: number, col: number) => {
+  const handleCellSelect = (vial: IVial | undefined, row: number, column: number) => {
     const data = {
       id: vial?.id || "",
       name: vial?.name || "",
@@ -36,7 +37,7 @@ const CellItem: React.FC<{
       boxName: box.name,
       userId: box.userId,
       row: row,
-      col: col,
+      column: column,
     }
     openModal(vial ? "EDIT_VIAL" : "ADD_VIAL", data);
   };
@@ -51,14 +52,14 @@ const CellItem: React.FC<{
         style={{
           backgroundColor: cell.cellLine?.color ?? "#0b1220",
         }}
-        onClick={() => isEditMode && handleCellSelect(cell.vial, row, col)}
+        onClick={() => isEditMode && handleCellSelect(cell.vial, row, column)}
       />
       {/* Tooltip */}
       {(cell.cellLine && cell.vial) && (
         <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-1
           hidden group-hover:block
           whitespace-nowrap px-2 py-1 text-xs rounded bg-black text-white shadow-lg">
-            <p className="text-center">{getCoordinate(row, col)}:</p>
+            <p className="text-center">{getCoordinate(row, column)}:</p>
             <p className="text-center max-w-64 truncate">{cell.cellLine.name}</p>
             <p className="text-center max-w-64 truncate">{cell.vial.name}</p>
         </div>
@@ -167,7 +168,7 @@ const BoxItem: React.FC<{
                   key={`${box.id}-${j}-${i}`}
                   cell={cell}
                   row={j+1}
-                  col={i+1}
+                  column={i+1}
                   isEditMode={isEditMode}
                   cellLineMap={cellLineMap}
                   box={box}
@@ -201,12 +202,13 @@ const BoxItem: React.FC<{
 const ControlMenu: React.FC<{
   allBoxes: IBox[],
   allVials: IVial[],
+  cellLines: ICellLine[],
   activeButton: filterButton,
   searchValue: string,
   setFilteredBoxes: (boxes: IBox[]) => void,
   setActiveButton: (active: filterButton) => void,
   setSearchValue: (search: string) => void,
-}> = ({allBoxes, allVials, activeButton, searchValue, setFilteredBoxes, setActiveButton, setSearchValue}) => {
+}> = ({allBoxes, allVials, cellLines, activeButton, searchValue, setFilteredBoxes, setActiveButton, setSearchValue}) => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -228,7 +230,7 @@ const ControlMenu: React.FC<{
     }
 
     // Cell line search filter
-    setFilteredBoxes(filterBoxesBySearch(filtered, allVials, fakeCellData, searchValue))
+    setFilteredBoxes(filterBoxesBySearch(filtered, allVials, cellLines, searchValue))
   },[activeButton, searchValue, allBoxes]);
 
   return (
@@ -322,6 +324,7 @@ export default function InventoryPage() {
   const { openModal } = useModal();
   const { boxes } = useBoxes();
   const { vials } = useVials();
+  const { cellLines } = useCellLines();
 
   const [filteredBoxes, setFilteredBoxes] = useState<IBox[]>([]);
   const [activeButton, setActiveButton] = useState<filterButton>("All");
@@ -333,7 +336,7 @@ export default function InventoryPage() {
 
   // Map of Cell Lines by ID
   const cellLineMap: CellLinesById = Object.fromEntries(
-    fakeCellData.map((cell) => [cell.id, cell])
+    cellLines.map((cell) => [cell.id, cell])
   );
 
   const showAddBoxButton = isEditMode && !searchValue && activeButton !== "Archived";
@@ -344,6 +347,7 @@ export default function InventoryPage() {
       <ControlMenu
         allBoxes={boxes}
         allVials={vials}
+        cellLines={cellLines}
         activeButton={activeButton}
         searchValue={searchValue}
         setFilteredBoxes={setFilteredBoxes}

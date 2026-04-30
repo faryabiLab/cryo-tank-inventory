@@ -1,4 +1,5 @@
-import { fakeCellData, speciesTagColorMap, growthTagColorMap, diseaseTagColor, tissueTagColor } from "~/utils/data";
+import { useCellLines } from "~/context/CellLinesContext";
+import { speciesTagColorMap, growthTagColorMap, diseaseTagColor, tissueTagColor } from "~/utils/data";
 import { hexToRgba } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
@@ -63,8 +64,10 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
 }
 
 const ClassificationPage = () => {
+  const { cellLines } = useCellLines();
+  
   // Group Cell Lines by Category
-  const categoryMap = fakeCellData.reduce((acc, cell) => {
+  const categoryMap = cellLines.reduce((acc, cell) => {
     if (!acc[cell.category]) acc[cell.category] = [];
     acc[cell.category].push(cell);
     return acc;

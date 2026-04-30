@@ -37,7 +37,8 @@ export const fakeVialData: IVial[] = [
     boxId: 'box_id_1',
     cellLineId: 'cell_line_id_1',
     name: 'Vial 1',
-    position: {row: 1, col: 1},
+    row: 1,
+    column: 1,
   },
   {
     id: 'vial_id_2',
@@ -45,7 +46,8 @@ export const fakeVialData: IVial[] = [
     boxId: 'box_id_1',
     cellLineId: 'cell_line_id_2',
     name: 'Vial 2',
-    position: {row: 1, col: 2},
+    row: 1,
+    column: 2,
   },
   {
     id: 'vial_id_3',
@@ -53,7 +55,8 @@ export const fakeVialData: IVial[] = [
     boxId: 'box_id_1',
     cellLineId: 'cell_line_id_3',
     name: 'Vial 3',
-    position: {row: 2, col: 1},
+    row: 2,
+    column: 1,
   },
   {
     id: 'vial_id_4',
@@ -61,7 +64,8 @@ export const fakeVialData: IVial[] = [
     boxId: 'box_id_2',
     cellLineId: 'cell_line_id_4',
     name: 'Vial 4',
-    position: {row: 3, col: 1},
+    row: 3,
+    column: 1,
   },
 ];
 
