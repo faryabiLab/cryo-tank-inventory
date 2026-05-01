@@ -4,15 +4,21 @@ import { useVials } from "~/context/VialsContext";
 import { getCoordinate } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
-export default function AddVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
+export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, onClose } : { 
+  data?: any;
+  lastCellLineId: string;
+  setLastCellLineId: (id: string) => void;
+  onClose: () => void;
+}) {
   const { cellLines } = useCellLines();
-  const [nameValue, setNameValue] = useState<string>("");
-  const [cellIdValue, setCellIdValue] = useState<string>("");
-
-  console.log('data: ', data);
 
   const coordinate: string = getCoordinate(Number(data.row), Number(data.column)) || "";
   const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
+
+  const [nameValue, setNameValue] = useState<string>("");
+  const [cellIdValue, setCellIdValue] = useState<string>(
+    lastCellLineId || selectorOptions?.[0]?.id || ""
+  );
 
   const { addVial } = useVials();
 
@@ -23,7 +29,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
       userId: data.userId,
       row: Number(data.row),
       column: Number(data.column),
-      cellLineId: cellIdValue || selectorOptions?.[0].id || "", // Replace by selector
+      cellLineId: cellIdValue || selectorOptions?.[0].id || "",
     })
 
     onClose();
@@ -35,6 +41,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
 
   const handleCellChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCellIdValue(event.target.value);
+    setLastCellLineId(event.target.value);
   };
 
   return (
@@ -80,6 +87,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
             className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
             focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
             onChange={handleCellChange}
+            value={cellIdValue}
           >
             {selectorOptions.map((cell) => 
               <option key={cell.id} value={cell.id}>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useModal } from "~/context/ModalContext";
 import AddBoxModal from "./AddBoxModal";
 import EditBoxModal from "./EditBoxModal";
@@ -8,6 +9,7 @@ import EditVialModal from "./EditVialModal";
 
 export default function ModalRoot() {
   const { modal, closeModal } = useModal();
+  const [lastCellLineId, setLastCellLineId] = useState<string>("");
 
   if (!modal.type) return null;
 
@@ -26,7 +28,7 @@ export default function ModalRoot() {
         <DeleteBoxModal data={modal.data} onClose={closeModal} />
       )}
       {modal.type === "ADD_VIAL" && (
-        <AddVialModal data={modal.data} onClose={closeModal} />
+        <AddVialModal data={modal.data} lastCellLineId={lastCellLineId} setLastCellLineId={setLastCellLineId} onClose={closeModal} />
       )}
       {modal.type === "EDIT_VIAL" && (
         <EditVialModal data={modal.data} onClose={closeModal} />
