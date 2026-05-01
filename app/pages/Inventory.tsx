@@ -4,7 +4,6 @@ import { useBoxes } from "~/context/BoxesContext";
 import { useCellLines } from "~/context/CellLinesContext";
 import { useModal } from "~/context/ModalContext";
 import { useVials } from "~/context/VialsContext";
-import { fakeCellData } from "~/utils/data";
 import { buildBoxGrid, filterBoxesBySearch, getCoordinate } from "~/utils/helpers";
 import type { BoxGrid, CellLinesById, GridCell, IBox, ICellLine, IVial } from "~/utils/interfaces";
 // import searchIcon from "../assets/icons/search.svg";
@@ -273,12 +272,12 @@ const ControlMenu: React.FC<{
   );
 }
 
-const ColorKey: React.FC<{cellLineMap: CellLinesById}> = ({cellLineMap}) => {
+const ColorKey: React.FC<{cellLines: ICellLine[]}> = ({cellLines}) => {
   return (
     <div className="flex flex-row items-center flex-wrap gap-3 border-b border-[#1e2d47] py-2 px-6">
       <p className="text-[10px] text-[#4a6080] uppercase">Color Key:</p>
-      {Object.entries(cellLineMap).map(([id, cell]) =>
-        <div key={`color-map-${id}`} className="flex flex-row items-center gap-1">
+      {cellLines.map((cell) =>
+        <div key={`color-map-${cell.id}`} className="flex flex-row items-center gap-1">
           <div className="aspect-square h-2 rounded-xs" style={{backgroundColor: cell.color || 'white'}} />
           <p className="text-[10px] text-[#8da0bb]">{cell.name}</p>
         </div>
@@ -354,7 +353,7 @@ export default function InventoryPage() {
         setActiveButton={setActiveButton}
         setSearchValue={setSearchValue}
       />
-      <ColorKey cellLineMap={cellLineMap} />
+      <ColorKey cellLines={cellLines} />
       <BoxCount
         allBoxes={boxes.filter((box: IBox) => box.archived === false)}
         filteredBoxes={filteredBoxes}

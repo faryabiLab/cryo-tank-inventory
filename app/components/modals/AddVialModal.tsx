@@ -9,6 +9,8 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
   const [nameValue, setNameValue] = useState<string>("");
   const [cellIdValue, setCellIdValue] = useState<string>("");
 
+  console.log('data: ', data);
+
   const coordinate: string = getCoordinate(Number(data.row), Number(data.column)) || "";
   const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
 
@@ -21,7 +23,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
       userId: data.userId,
       row: Number(data.row),
       column: Number(data.column),
-      cellLineId: cellIdValue || selectorOptions[0].id || "", // Replace by selector
+      cellLineId: cellIdValue || selectorOptions?.[0].id || "", // Replace by selector
     })
 
     onClose();
@@ -70,7 +72,7 @@ export default function AddVialModal({ data, onClose }: { data?: any; onClose: (
             <label className="text-[12px] text-[#4a6080] uppercase">Cell Line</label>
             <div className="aspect-square h-2 rounded-xs" 
               style={{
-                backgroundColor: data.cellLineMap[cellIdValue || selectorOptions[0].id]?.color || 'white'
+                backgroundColor: data.cellLineMap[cellIdValue || selectorOptions[0]?.id]?.color || 'white'
               }} 
             />
           </div>
