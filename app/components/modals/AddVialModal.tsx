@@ -11,6 +11,7 @@ export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, 
   onClose: () => void;
 }) {
   const { cellLines } = useCellLines();
+  const { addVial } = useVials();
 
   const coordinate: string = getCoordinate(Number(data.row), Number(data.column)) || "";
   const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
@@ -19,8 +20,6 @@ export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, 
   const [cellIdValue, setCellIdValue] = useState<string>(
     lastCellLineId || selectorOptions?.[0]?.id || ""
   );
-
-  const { addVial } = useVials();
 
   const handleCreateVial = () => {
     addVial({
