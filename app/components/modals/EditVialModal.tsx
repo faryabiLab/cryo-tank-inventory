@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useCellLines } from "~/context/CellLinesContext";
 import { useVials } from "~/context/VialsContext";
 import { getCoordinate } from "~/utils/helpers";
-import type { ICellLine } from "~/utils/interfaces";
 
 export default function EditVialModal({ data, onClose }: { data?: any; onClose: () => void }) {
   const { cellLines } = useCellLines();
@@ -10,7 +9,6 @@ export default function EditVialModal({ data, onClose }: { data?: any; onClose: 
   const [cellIdValue, setCellIdValue] = useState<string>(data.cellLineId || "");
 
   const coordinate: string = getCoordinate(data.row, data.column) || "";
-  const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
 
   const { updateVial, deleteVial } = useVials();
 
@@ -18,7 +16,7 @@ export default function EditVialModal({ data, onClose }: { data?: any; onClose: 
     updateVial(data.id, {
       ...data,
       name: nameValue,
-      cellLineId: cellIdValue || selectorOptions[0].id || "",
+      cellLineId: cellIdValue || cellLines[0].id || "",
     })
 
     onClose();
@@ -72,7 +70,7 @@ export default function EditVialModal({ data, onClose }: { data?: any; onClose: 
             <label className="text-[12px] text-[#4a6080] uppercase">Cell Line</label>
             <div className="aspect-square h-2 rounded-xs" 
               style={{
-                backgroundColor: data.cellLineMap[cellIdValue || selectorOptions[0].id]?.color || 'white'
+                backgroundColor: data.cellLineMap[cellIdValue || cellLines[0].id]?.color || 'white'
               }} 
             />
           </div>
@@ -82,7 +80,7 @@ export default function EditVialModal({ data, onClose }: { data?: any; onClose: 
             onChange={handleCellChange}
             value={cellIdValue}
           >
-            {selectorOptions.map((cell) => 
+            {cellLines.map((cell) => 
               <option key={cell.id} value={cell.id}>
                 {cell.name}
               </option>

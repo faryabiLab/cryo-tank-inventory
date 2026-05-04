@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "~/auth/AuthContext";
 import { useNavigate } from "react-router";
 
 type Mode = "login" | "register" | "confirm";
 
 export default function Login() {
-  const { login, register, confirmRegister, logout } = useAuth();
+  const { login, register, confirmRegister, user } = useAuth();
   const navigate = useNavigate();
 
   const [mode, setMode] = useState<Mode>("login");
@@ -16,13 +16,18 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, loading]);
+
   const handleSubmit = async () => {
     setError(null);
     setLoading(true);
     try {
       if (mode === "login") {
         await login(email, password);
-        navigate("/");
       } else if (mode === "register") {
         const { nextStep } = await register(email, password, name);
         if (nextStep === "CONFIRM_SIGN_UP") setMode("confirm");
@@ -116,8 +121,6 @@ export default function Login() {
               </button>
             </p>
           )}
-
-          <button onClick={logout}>Sign out</button>
         </div>
       </div>
     </div>

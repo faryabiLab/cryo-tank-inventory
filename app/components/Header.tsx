@@ -13,7 +13,7 @@ export default function Header({
   isEditMode,
   setIsEditMode,
 }: HeaderProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { boxes } = useBoxes();
   const { vials } = useVials();
   const { cellLines } = useCellLines();
@@ -52,6 +52,13 @@ export default function Header({
             ${isEditMode && "text-[#f59e0b] border-[#f59e0b]"}`}
           >
             {isEditMode ? "✕ Exit Edit" : "✎ Edit Mode"} 
+          </button>
+          <button
+            onClick={logout}
+            className="flex items-center text-[#8da0bb] text-[12px] bg-[#161f30] border border-[#1e2d47] 
+            px-4 py-1.5 rounded-md cursor-pointer transition hover:text-red-400 hover:border-red-400 duration-150"
+          >
+            ⏻ Sign out
           </button>
         </div>
       </div>

@@ -72,7 +72,6 @@ export const fakeVialData: IVial[] = [
 export const fakeCellData: ICellLine[] = [
   {
     id: 'cell_line_id_1',
-    userId: 'user_id_1',
     name: 'DND41',
     description: 'Human T-cell acute lymphoblastic leukemia',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -84,7 +83,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_2',
-    userId: 'user_id_1',
     name: 'Jurkat',
     description: 'Jurkat E6-1 human T-cell leukemia',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -96,7 +94,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_3',
-    userId: 'user_id_1',
     name: 'KOPTK1',
     description: 'Human T-ALL cell line',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -108,7 +105,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_4',
-    userId: 'user_id_1',
     name: 'CUTLL-1',
     description: 'Human T-ALL (CUTLL-1 / Cuttl1)',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -120,7 +116,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_5',
-    userId: 'user_id_1',
     name: 'HPBALL',
     description: 'Human T-cell leukemia (DSMZ-certified)',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -132,7 +127,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_6',
-    userId: 'user_id_1',
     name: 'ALL-SIL',
     description: 'Human T-ALL cell line',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -144,7 +138,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_7',
-    userId: 'user_id_1',
     name: 'TALL-1',
     description: 'Human T-cell leukemia/lymphoma',
     category: 'Human T-cell Leukemia / Lymphoma',
@@ -156,7 +149,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_8',
-    userId: 'user_id_1',
     name: 'Granta519',
     description: 'Human mantle cell lymphoma (MCL)',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -168,7 +160,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_9',
-    userId: 'user_id_1',
     name: 'Rec1',
     description: 'Human mantle cell lymphoma',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -180,7 +171,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_10',
-    userId: 'user_id_1',
     name: 'SP49',
     description: 'Human MCL cell line',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -192,7 +182,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_11',
-    userId: 'user_id_1',
     name: 'Mino',
     description: 'Human mantle cell lymphoma',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -204,7 +193,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_12',
-    userId: 'user_id_1',
     name: 'JEKO-1',
     description: 'Human MCL cell line',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -216,7 +204,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_13',
-    userId: 'user_id_1',
     name: 'CCMCL1',
     description: 'Millipore CCMCL1 MCL line',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -228,7 +215,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_14',
-    userId: 'user_id_1',
     name: 'Primary MCL PBMC',
     description: 'Patient-derived MCL PBMCs',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -240,7 +226,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_15',
-    userId: 'user_id_1',
     name: 'RL-MCL-14',
     description: 'Primary MCL sample #8419',
     category: 'Human B-cell / Mantle Cell Lymphoma',
@@ -252,7 +237,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_16',
-    userId: 'user_id_1',
     name: 'MEC1',
     description: 'Human chronic lymphocytic leukemia (CLL)',
     category: 'Human B-cell Leukemia / Other',
@@ -264,7 +248,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_17',
-    userId: 'user_id_1',
     name: 'PGA1',
     description: 'Human MCL cell line',
     category: 'Human B-cell Leukemia / Other',
@@ -276,7 +259,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_18',
-    userId: 'user_id_1',
     name: 'JVM2',
     description: 'Human MCL/B-CLL cell line',
     category: 'Human B-cell Leukemia / Other',
@@ -288,7 +270,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_19',
-    userId: 'user_id_1',
     name: 'GM12878',
     description: 'Normal human B-lymphoblastoid (EBV-transformed)',
     category: 'Human B-cell Leukemia / Other',
@@ -300,7 +281,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_20',
-    userId: 'user_id_1',
     name: 'NALM16',
     description: 'Human B-cell acute lymphoblastic leukemia',
     category: 'Human B-cell Leukemia / Other',
@@ -312,7 +292,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_21',
-    userId: 'user_id_1',
     name: 'REH',
     description: 'Human B-ALL cell line',
     category: 'Human B-cell Leukemia / Other',
@@ -324,7 +303,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_22',
-    userId: 'user_id_1',
     name: 'U266',
     description: 'Human multiple myeloma',
     category: 'Human Multiple Myeloma',
@@ -336,7 +314,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_23',
-    userId: 'user_id_1',
     name: 'RPMI 8226',
     description: 'Human multiple myeloma',
     category: 'Human Multiple Myeloma',
@@ -348,7 +325,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_24',
-    userId: 'user_id_1',
     name: 'KMS11',
     description: 'Human multiple myeloma',
     category: 'Human Multiple Myeloma',
@@ -360,7 +336,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_25',
-    userId: 'user_id_1',
     name: 'MMIS',
     description: 'Human multiple myeloma',
     category: 'Human Multiple Myeloma',
@@ -372,7 +347,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_26',
-    userId: 'user_id_1',
     name: 'MB157',
     description: 'MDA-MB-157 triple-negative breast cancer',
     category: 'Human breast cancer',
@@ -384,7 +358,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_27',
-    userId: 'user_id_1',
     name: 'MCF7',
     description: 'Human breast cancer, ER+',
     category: 'Human breast cancer',
@@ -396,7 +369,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_28',
-    userId: 'user_id_1',
     name: 'HCC1599',
     description: 'Human TNBC cell line',
     category: 'Human breast cancer',
@@ -408,7 +380,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_29',
-    userId: 'user_id_1',
     name: 'MDA-MB-231',
     description: 'Human TNBC, highly metastatic',
     category: 'Human breast cancer',
@@ -420,7 +391,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_30',
-    userId: 'user_id_1',
     name: 'MDA-MB-468',
     description: 'Human TNBC cell line',
     category: 'Human breast cancer',
@@ -432,7 +402,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_31',
-    userId: 'user_id_1',
     name: 'SUM149',
     description: 'SUM149PT inflammatory breast cancer',
     category: 'Human breast cancer',
@@ -444,7 +413,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_32',
-    userId: 'user_id_1',
     name: '293T',
     description: 'HEK293T lentiviral packaging cell line',
     category: 'Packaging / Tool lines',
@@ -456,7 +424,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_33',
-    userId: 'user_id_1',
     name: 'PlatE',
     description: 'Mouse retroviral packaging line (Plat-E)',
     category: 'Packaging / Tool lines',
@@ -468,7 +435,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_34',
-    userId: 'user_id_1',
     name: 'RAG 1-1',
     description: 'Mouse B-cell line',
     category: 'Mouse B-cell lines',
@@ -480,7 +446,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_35',
-    userId: 'user_id_1',
     name: '38B9',
     description: 'Mouse pre-B ALL cell line',
     category: 'Mouse B-cell lines',
@@ -492,7 +457,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_36',
-    userId: 'user_id_1',
     name: '445*3',
     description: 'Mouse B-ALL line',
     category: 'Mouse B-cell lines',
@@ -504,7 +468,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_37',
-    userId: 'user_id_1',
     name: '3-1',
     description: 'Mouse B-ALL line',
     category: 'Mouse B-cell lines',
@@ -516,7 +479,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_38',
-    userId: 'user_id_1',
     name: '5194',
     description: 'Mouse B-cell lymphoma line',
     category: 'Mouse B-cell lines',
@@ -528,7 +490,6 @@ export const fakeCellData: ICellLine[] = [
   },
   {
     id: 'cell_line_id_39',
-    userId: 'user_id_1',
     name: 'A70',
     description: 'Mouse B-cell line',
     category: 'Mouse B-cell lines',

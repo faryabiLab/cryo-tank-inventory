@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useCellLines } from "~/context/CellLinesContext";
 import { useVials } from "~/context/VialsContext";
 import { getCoordinate } from "~/utils/helpers";
-import type { ICellLine } from "~/utils/interfaces";
 
 export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, onClose } : { 
   data?: any;

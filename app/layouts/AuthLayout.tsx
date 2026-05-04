@@ -1,15 +1,18 @@
-import { Outlet } from "react-router";
-import { AuthProvider } from "~/auth/AuthContext";
+import { Outlet, useNavigate } from "react-router";
+import { useEffect } from "react";
+import { useAuth } from "~/auth/AuthContext";
 
 export default function AuthLayout() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
-  return (
-    <AuthProvider>
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-1">
-          <Outlet />
-        </main>
-      </div>
-    </AuthProvider>
-  );
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, loading]);
+
+  if (loading || user) return null;
+
+  return <Outlet />;
 }
