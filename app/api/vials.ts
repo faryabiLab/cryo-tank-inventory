@@ -7,7 +7,7 @@ export const vialsApi = {
     return api.get<IVial[]>(`/vials${params ? `?${params}` : ''}`);
   },
   getById: (id: string) => api.get<IVial>(`/vials/${id}`),
-  create: (data: Omit<IVial, 'id'>) => api.post<IVial>('/vials', data),
+  create: (data: Omit<IVial, 'id' | 'userId'>) => api.post<IVial>('/vials', data),
   update: (id: string, data: Partial<Omit<IVial, 'id'>>) => api.patch<IVial>(`/vials/${id}`, data),
   delete: (id: string) => api.delete(`/vials/${id}`),
 };

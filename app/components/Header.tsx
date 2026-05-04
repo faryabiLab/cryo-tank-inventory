@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import { useAuth } from "~/auth/AuthContext";
 import { useBoxes } from "~/context/BoxesContext";
 import { useCellLines } from "~/context/CellLinesContext";
 import { useVials } from "~/context/VialsContext";
@@ -12,6 +13,7 @@ export default function Header({
   isEditMode,
   setIsEditMode,
 }: HeaderProps) {
+  const { user } = useAuth();
   const { boxes } = useBoxes();
   const { vials } = useVials();
   const { cellLines } = useCellLines();
@@ -27,7 +29,7 @@ export default function Header({
         {/* Title */}
         <div className="flex flex-col">
           <p className="text-[#38bdf8] text-[15px] font-bold">❄ CRYO TANK INVENTORY</p>
-          <p className="text-[#4a6080] text-[11px]">ALEX LAB · LIQUID NITROGEN STORAGE</p>
+          <p className="text-[#4a6080] text-[11px] uppercase">{user?.name} LAB · LIQUID NITROGEN STORAGE</p>
         </div>
         {/* Metrics */}
         <div className="flex flex-row gap-5">

@@ -23,7 +23,6 @@ export interface IVial {
 // Cell line
 export interface ICellLine {
   id: string;
-  userId: string;
   name: string;
   description: string;
   category: string;

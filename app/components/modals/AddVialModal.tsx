@@ -14,21 +14,19 @@ export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, 
   const { addVial } = useVials();
 
   const coordinate: string = getCoordinate(Number(data.row), Number(data.column)) || "";
-  const selectorOptions: ICellLine[] = cellLines.filter((cell) => cell.userId === data.userId);
 
   const [nameValue, setNameValue] = useState<string>("");
   const [cellIdValue, setCellIdValue] = useState<string>(
-    lastCellLineId || selectorOptions?.[0]?.id || ""
+    lastCellLineId || cellLines?.[0]?.id || ""
   );
 
   const handleCreateVial = () => {
     addVial({
       name: nameValue,
       boxId: data.boxId,
-      userId: data.userId,
       row: Number(data.row),
       column: Number(data.column),
-      cellLineId: cellIdValue || selectorOptions?.[0].id || "",
+      cellLineId: cellIdValue || cellLines?.[0].id || "",
     })
 
     onClose();
@@ -78,7 +76,7 @@ export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, 
             <label className="text-[12px] text-[#4a6080] uppercase">Cell Line</label>
             <div className="aspect-square h-2 rounded-xs" 
               style={{
-                backgroundColor: data.cellLineMap[cellIdValue || selectorOptions[0]?.id]?.color || 'white'
+                backgroundColor: data.cellLineMap[cellIdValue || cellLines[0]?.id]?.color || 'white'
               }} 
             />
           </div>
@@ -88,7 +86,7 @@ export default function AddVialModal({ data, lastCellLineId, setLastCellLineId, 
             onChange={handleCellChange}
             value={cellIdValue}
           >
-            {selectorOptions.map((cell) => 
+            {cellLines.map((cell) => 
               <option key={cell.id} value={cell.id}>
                 {cell.name}
               </option>

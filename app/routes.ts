@@ -4,7 +4,10 @@ import { flatRoutes } from "@react-router/fs-routes";
 export default [
   layout("layouts/MainLayout.tsx", [
     route("/", "pages/Inventory.tsx"),
-    route("/classification", "pages/Classification.tsx")
+    route("/classification", "pages/Classification.tsx"),
+  ]),
+  layout("layouts/AuthLayout.tsx", [
+    route("/login", "pages/Login.tsx"),
   ]),
 
   ...(await flatRoutes()),

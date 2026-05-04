@@ -1,8 +1,23 @@
+import { fetchAuthSession } from "aws-amplify/auth";
+
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
+async function getToken(): Promise<string> {
+  const session = await fetchAuthSession();
+  const token = session.tokens?.idToken?.toString() ?? null;
+
+  if (!token) throw new Error("No auth token available");
+  return token;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = await getToken();
+
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
     ...options,
   });
 

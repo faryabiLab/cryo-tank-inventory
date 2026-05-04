@@ -6,32 +6,35 @@ import { VialsProvider } from "~/context/VialsContext";
 import ModalRoot from "~/components/modals/ModalRoot";
 import Header from "../components/Header";
 import { CellLinesProvider } from "~/context/CellLinesContext";
+import { AuthProvider } from "~/auth/AuthContext";
 
 export default function MainLayout() {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   return (
-    <BoxesProvider>
-      <VialsProvider>
-        <CellLinesProvider>
-          <ModalProvider>
-            <div className="min-h-screen flex flex-col">
-              <Header
-                isEditMode={isEditMode}
-                setIsEditMode={setIsEditMode}
-              />
-              <main className="flex-1">
-                <Outlet 
-                  context={{ 
-                    isEditMode,
-                  }}
+    <AuthProvider>
+      <BoxesProvider>
+        <VialsProvider>
+          <CellLinesProvider>
+            <ModalProvider>
+              <div className="min-h-screen flex flex-col">
+                <Header
+                  isEditMode={isEditMode}
+                  setIsEditMode={setIsEditMode}
                 />
-              </main>
-              <ModalRoot />
-            </div>
-          </ModalProvider>
-        </CellLinesProvider>
-      </VialsProvider>
-    </BoxesProvider>
+                <main className="flex-1">
+                  <Outlet 
+                    context={{ 
+                      isEditMode,
+                    }}
+                  />
+                </main>
+                <ModalRoot />
+              </div>
+            </ModalProvider>
+          </CellLinesProvider>
+        </VialsProvider>
+      </BoxesProvider>
+    </AuthProvider>
   );
 }

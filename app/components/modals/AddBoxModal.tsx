@@ -16,7 +16,6 @@ export default function AddBoxModal({ onClose }: { onClose: () => void }) {
     addBox({
       name: nameValue,
       essential: Boolean(typeValue),
-      userId: '123', // TODO: Change after adding user management
       rows: 9,
       columns: 9,
       archived: false,

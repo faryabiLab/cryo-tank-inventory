@@ -2,7 +2,7 @@ import { api } from './client';
 import type { ICellLine } from '~/utils/interfaces';
 
 export const cellLinesApi = {
-  getAll: (filters?: { category?: string; userId?: string }) => {
+  getAll: (filters?: { category?: string }) => {
     const params = new URLSearchParams(filters as Record<string, string>).toString();
     return api.get<ICellLine[]>(`/cell-lines${params ? `?${params}` : ''}`);
   },

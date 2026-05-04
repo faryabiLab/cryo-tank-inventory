@@ -6,7 +6,7 @@ type VialsContextType = {
   vials: IVial[];
   loading: boolean;
   error: string | null;
-  addVial: (vial: Omit<IVial, "id">) => Promise<void>;
+  addVial: (vial: Omit<IVial, "id" | "userId">) => Promise<void>;
   updateVial: (id: string, updates: Partial<IVial>) => Promise<void>;
   deleteVial: (id: string) => Promise<void>;
 };
@@ -31,7 +31,7 @@ export function VialsProvider({ children }: { children: React.ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const addVial = async (vial: Omit<IVial, "id">) => {
+  const addVial = async (vial: Omit<IVial, "id" | "userId">) => {
     const newVial = await vialsApi.create(vial);
     setVials(prev => [...prev, newVial]);
   };

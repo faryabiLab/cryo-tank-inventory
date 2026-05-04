@@ -6,7 +6,7 @@ type BoxesContextType = {
   boxes: IBox[];
   loading: boolean;
   error: string | null;
-  addBox: (box: Omit<IBox, "id">) => Promise<void>;
+  addBox: (box: Omit<IBox, "id" | "userId">) => Promise<void>;
   updateBox: (id: string, updates: Partial<IBox>) => Promise<void>;
   deleteBox: (id: string) => Promise<void>;
 };
@@ -32,7 +32,7 @@ export function BoxesProvider({ children }: { children: React.ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const addBox = async (box: Omit<IBox, "id">) => {
+  const addBox = async (box: Omit<IBox, "id" | "userId">) => {
     const newBox = await boxesApi.create(box);
     setBoxes(prev => [...prev, newBox]);
   };
