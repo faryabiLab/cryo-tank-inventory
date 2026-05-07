@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchUserAttributes } from "aws-amplify/auth";
+import { getCurrentUser, signIn, signOut, signUp, confirmSignUp, fetchUserAttributes, resetPassword, confirmResetPassword } from "aws-amplify/auth";
 
 type AuthUser = {
   userId: string;
@@ -14,6 +14,8 @@ type AuthContextType = {
   logout: () => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<{ nextStep: string }>;
   confirmRegister: (email: string, code: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  confirmForgotPassword: (email: string, code: string, newPassword: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -64,8 +66,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await confirmSignUp({ username: email, confirmationCode: code });
   };
 
+  const forgotPassword = async (email: string) => {
+    await resetPassword({username: email});
+  };
+
+  const confirmForgotPassword = async (email: string, code: string, newPassword: string) => {
+    await confirmResetPassword({username: email, confirmationCode: code, newPassword})
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, register, confirmRegister }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, register, confirmRegister, forgotPassword, confirmForgotPassword }}>
       {children}
     </AuthContext.Provider>
   );

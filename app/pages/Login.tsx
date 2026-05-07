@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useAuth } from "~/auth/AuthContext";
 import { useNavigate } from "react-router";
 
-type Mode = "login" | "register" | "confirm";
+type Mode = "login" | "register" | "confirm" | "forgot" | "confirmForgot";
 
 export default function Login() {
-  const { login, register, confirmRegister, user } = useAuth();
+  const { login, register, confirmRegister, forgotPassword, confirmForgotPassword, user } = useAuth();
   const navigate = useNavigate();
 
   const [mode, setMode] = useState<Mode>("login");
@@ -13,6 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +35,12 @@ export default function Login() {
       } else if (mode === "confirm") {
         await confirmRegister(email, code);
         setMode("login");
+      } else if (mode === "forgot") {
+        await forgotPassword(email);
+        setMode("confirmForgot");
+      } else if (mode === "confirmForgot") {
+        await confirmForgotPassword(email, code, newPassword);
+        setMode("login");
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -46,7 +53,10 @@ export default function Login() {
     <div className="flex items-center justify-center min-h-screen bg-[#0a0f1a]">
       <div className="bg-[#0f1624] border border-[#253552] rounded-xl p-8 w-96">
         <h2 className="text-[#dde5f0] text-lg font-semibold mb-6">
-          {mode === "login" ? "Sign in" : mode === "register" ? "Create account" : "Confirm email"}
+          {mode === "forgot" ? "Reset password" : 
+          mode === "confirmForgot" ? "Enter reset code" : 
+          mode === "login" ? "Sign in" : 
+          mode === "register" ? "Create account" : "Confirm email"}
         </h2>
 
         <div className="flex flex-col gap-4">
@@ -61,7 +71,7 @@ export default function Login() {
             />
           )}
 
-          {mode !== "confirm" && (
+          {(mode !== "confirm" && mode !== "confirmForgot") && (
             <>
               <input
                 type="email"
@@ -71,14 +81,16 @@ export default function Login() {
                 className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
                   focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
               />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
-                  focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
-              />
+              {mode !== "forgot" && (
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+                    focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
+                />
+              )}
             </>
           )}
 
@@ -91,6 +103,28 @@ export default function Login() {
               className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
                 focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
             />
+          )}
+
+
+          {mode === "confirmForgot" && (
+            <>
+              <input
+                type="text"
+                placeholder="Reset code"
+                value={code}
+                onChange={e => setCode(e.target.value)}
+                className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+                  focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
+              />
+              <input
+                type="password"
+                placeholder="New password"
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)}
+                className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+                  focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
+              />
+            </>
           )}
 
           {error && <p className="text-red-400 text-[12px]">{error}</p>}
@@ -120,6 +154,15 @@ export default function Login() {
                 Sign in
               </button>
             </p>
+          )}
+
+          {mode === "login" && (
+            <button 
+              onClick={() => setMode("forgot")} 
+              className="text-[#4a6080] text-[12px] hover:text-[#38bdf8] transition duration-150 cursor-pointer"
+            >
+              Forgot password?
+            </button>
           )}
         </div>
       </div>
