@@ -11,9 +11,11 @@ export default function Login() {
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +32,7 @@ export default function Login() {
       if (mode === "login") {
         await login(email, password);
       } else if (mode === "register") {
+        if (password !== confirmPassword) throw new Error("Passwords do not match");
         const { nextStep } = await register(email, password, name);
         if (nextStep === "CONFIRM_SIGN_UP") setMode("confirm");
       } else if (mode === "confirm") {
@@ -39,6 +42,7 @@ export default function Login() {
         await forgotPassword(email);
         setMode("confirmForgot");
       } else if (mode === "confirmForgot") {
+        if (newPassword !== confirmNewPassword) throw new Error("Passwords do not match");
         await confirmForgotPassword(email, code, newPassword);
         setMode("login");
       }
@@ -91,20 +95,34 @@ export default function Login() {
                     focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
                 />
               )}
+              {mode === "register" && (
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+                    focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
+                />
+              )}
             </>
           )}
 
           {mode === "confirm" && (
-            <input
-              type="text"
-              placeholder="Confirmation code"
-              value={code}
-              onChange={e => setCode(e.target.value)}
-              className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
-                focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
-            />
+            <>
+              <input
+                type="text"
+                placeholder="Confirmation code"
+                value={code}
+                onChange={e => setCode(e.target.value)}
+                className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+                  focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
+              />
+              <p className="text-[#4a6080] text-[11px]">
+                Didn't receive the email? Check your <span className="text-[#f59e0b]">spam folder</span> — it may have landed there.
+              </p>
+            </>
           )}
-
 
           {mode === "confirmForgot" && (
             <>
@@ -121,6 +139,14 @@ export default function Login() {
                 placeholder="New password"
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
+                className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
+                  focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
+              />
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmNewPassword}
+                onChange={e => setConfirmNewPassword(e.target.value)}
                 className="text-[12px] text-[#8da0bb] w-full border border-[#38bdf84d] rounded-sm px-2 py-2.5
                   focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-transparent"
               />

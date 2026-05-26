@@ -23,7 +23,7 @@ export default function Header({
   };
 
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 z-10">
       {/* Section 1 - Basic header */}
       <div className="flex flex-row justify-between items-center bg-[#080c14] border-b border-[#1e2d47] py-3 px-6">
         {/* Title */}

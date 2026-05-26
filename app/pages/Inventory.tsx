@@ -77,6 +77,7 @@ const BoxItem: React.FC<{
   const { openModal } = useModal();
   const { updateBox } = useBoxes();
   const [boxGrid, setBoxGrid] = useState<BoxGrid | null>(null);
+  const [boxName, setBoxName] = useState<string>(box.name);
 
   useEffect(() => {
     setBoxGrid(buildBoxGrid(box, boxVials, cellLineMap));
@@ -104,11 +105,17 @@ const BoxItem: React.FC<{
     }
   }
 
-  // TODO: Optimize, don't update on every letter change, but after losing focus
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Update name on database
+  const updateName = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateBox(box.id, {
       name: event.target.value,
     });
+    setBoxName(event.target.value);
+  };
+
+  // Update name locally
+  const handleLocalNameUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBoxName(event.target.value);
   };
 
   return (
@@ -126,8 +133,9 @@ const BoxItem: React.FC<{
             type="text"
             className="text-[11px] text-[#8da0bb] w-full border not-focus:border-dashed border-[#38bdf84d] rounded-sm px-1.5 py-0.5
               focus:text-[#dde5f0] focus:border focus:border-[#38bdf8] transition duration-300 focus:outline-none"
-            value={box.name}
-            onChange={handleNameChange}
+            value={boxName}
+            onBlur={updateName}
+            onChange={handleLocalNameUpdate}
           />
         ) : (
           <p className="w-full text-[12px] text-[#dde5f0]">📝 {box.name}</p>
