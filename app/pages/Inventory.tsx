@@ -12,7 +12,9 @@ type filterButton = "All" | "Essential" | "Has Cells" | "Archived";
 
 type OutletContextType = {
   isEditMode: boolean;
-}
+  paintMode: boolean;
+  paintCellLineId: string;
+};
 
 // Single Cell Item. Can contain a vial
 const CellItem: React.FC<{
@@ -20,25 +22,40 @@ const CellItem: React.FC<{
   row: number,
   column: number,
   isEditMode: boolean,
+  paintMode: boolean,
+  paintCellLineId: string,
   cellLineMap: CellLinesById,
   box: IBox,
-}> = ({cell, row, column, isEditMode, cellLineMap, box}) => {
+}> = ({cell, row, column, isEditMode, paintMode, paintCellLineId, cellLineMap, box}) => {
   const { openModal } = useModal();
+  const { addVial } = useVials();
 
   // Add vial on empty space or Edit existing vial
+  // If paint mode is on, automatically create a vial
   const handleCellSelect = (vial: IVial | undefined, row: number, column: number) => {
-    const data = {
-      id: vial?.id || "",
-      name: vial?.name || "",
-      cellLineId: vial?.cellLineId || "",
-      cellLineMap: cellLineMap, 
-      boxId: box.id,
-      boxName: box.name,
-      userId: box.userId,
-      row: row,
-      column: column,
+    if(paintMode) {
+      if(!paintCellLineId || vial) return; // no cell line selected or cell is occupied
+      addVial({
+        name: "",
+        boxId: box.id,
+        row: Number(row),
+        column: Number(column),
+        cellLineId: paintCellLineId,
+      })
+    } else {
+      const data = {
+        id: vial?.id || "",
+        name: vial?.name || "",
+        cellLineId: vial?.cellLineId || "",
+        cellLineMap: cellLineMap, 
+        boxId: box.id,
+        boxName: box.name,
+        userId: box.userId,
+        row: row,
+        column: column,
+      }
+      openModal(vial ? "EDIT_VIAL" : "ADD_VIAL", data);
     }
-    openModal(vial ? "EDIT_VIAL" : "ADD_VIAL", data);
   };
 
   return (
@@ -72,8 +89,10 @@ const BoxItem: React.FC<{
   box: IBox, 
   allVials: IVial[],
   cellLineMap: CellLinesById, 
-  isEditMode: boolean
-}> = ({box, allVials, cellLineMap, isEditMode}) => {
+  isEditMode: boolean,
+  paintMode: boolean,
+  paintCellLineId: string,
+}> = ({box, allVials, cellLineMap, isEditMode, paintMode, paintCellLineId}) => {
   const { openModal } = useModal();
   const { updateBox } = useBoxes();
   const [boxGrid, setBoxGrid] = useState<BoxGrid | null>(null);
@@ -177,6 +196,8 @@ const BoxItem: React.FC<{
                   row={j+1}
                   column={i+1}
                   isEditMode={isEditMode}
+                  paintMode={paintMode}
+                  paintCellLineId={paintCellLineId}
                   cellLineMap={cellLineMap}
                   box={box}
                 />
@@ -327,7 +348,7 @@ const BoxCount: React.FC<{
 }
 
 export default function InventoryPage() {
-  const { isEditMode } = useOutletContext<OutletContextType>();
+  const { isEditMode, paintMode, paintCellLineId } = useOutletContext<OutletContextType>();
   const { openModal } = useModal();
   const { boxes } = useBoxes();
   const { vials } = useVials();
@@ -377,6 +398,8 @@ export default function InventoryPage() {
             allVials={vials}
             cellLineMap={cellLineMap}
             isEditMode={isEditMode}
+            paintMode={paintMode}
+            paintCellLineId={paintCellLineId}
           />
         )}
         {/* Create Box Button */}

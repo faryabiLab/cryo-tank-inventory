@@ -6,12 +6,20 @@ import { useVials } from "~/context/VialsContext";
 
 interface HeaderProps {
   isEditMode: boolean;
+  paintMode: boolean;
+  paintCellLineId: string;
   setIsEditMode: (value: boolean) => void;
+  setPaintMode: (value: boolean) => void;
+  setPaintCellLineId: (value: string) => void;
 }
 
 export default function Header({
   isEditMode,
+  paintMode,
+  paintCellLineId,
   setIsEditMode,
+  setPaintMode,
+  setPaintCellLineId
 }: HeaderProps) {
   const { user, logout } = useAuth();
   const { boxes } = useBoxes();
@@ -19,7 +27,16 @@ export default function Header({
   const { cellLines } = useCellLines();
 
   const handleEditMode = () => {
-    setIsEditMode(!isEditMode);
+    const newEditMode = !isEditMode;
+    setIsEditMode(newEditMode);
+    if (!newEditMode) setPaintMode(false); // exit paint mode when edit mode is off
+  };
+
+  const handlePaintMode = () => {
+    if (!paintMode && !paintCellLineId) {
+      setPaintCellLineId(cellLines[0]?.id ?? "");
+    }
+    setPaintMode(!paintMode);
   };
 
   return (
@@ -45,6 +62,32 @@ export default function Header({
             <p className="text-[#38bdf8] text-[18px] font-bold">{cellLines.length.toLocaleString('es-US')}</p>
             <p className="text-[#4a6080] text-[10px]">CELL LINES</p>
           </div>
+          {isEditMode && (
+            <div className="flex gap-2">
+              {paintMode && (
+                <select
+                  value={paintCellLineId}
+                  onChange={e => setPaintCellLineId(e.target.value)}
+                  className="text-[12px] text-[#8da0bb] border border-[#38bdf84d] rounded-sm px-2 py-1.5
+                    focus:text-[#dde5f0] focus:border-[#38bdf8] transition duration-300 focus:outline-none bg-[#161f30]"
+                >
+                  {cellLines.map(cl => (
+                    <option key={cl.id} value={cl.id}>{cl.name}</option>
+                  ))}
+                </select>
+              )}
+              <button
+                onClick={handlePaintMode}
+                className={`flex items-center text-[12px] border rounded-md px-4 py-1.5 cursor-pointer transition duration-150
+                  ${paintMode
+                    ? 'text-[#a78bfa] border-[#a78bfa] bg-[#a78bfa1a] hover:bg-[#a78bfa33]'
+                    : 'text-[#8da0bb] border-[#1e2d47] bg-[#161f30] hover:text-[#a78bfa] hover:border-[#a78bfa]'
+                  }`}
+              >
+                ✦ Paint Mode
+              </button>
+            </div>
+          )}
           <button
             onClick={handleEditMode}
             className={`flex items-center text-[#8da0bb] text-[12px] bg-[#161f30] border border-[#1e2d47] 
