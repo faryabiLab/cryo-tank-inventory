@@ -1,0 +1,1 @@
+import{a as o,p as c}from"./chunk-UVKPFVEO-D2OM0yLm.js";const e=o.createContext(null),p=()=>o.useContext(e);function x({children:s}){const[a,t]=o.useState({type:null}),n=(r,u)=>{t({type:r,data:u})},l=()=>{t({type:null})};return c.jsx(e.Provider,{value:{modal:a,openModal:n,closeModal:l},children:s})}export{x as M,p as u};
