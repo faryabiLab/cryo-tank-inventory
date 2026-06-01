@@ -4,6 +4,6 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   base: process.env.NODE_ENV === 'production' ? '/cryo-tank-inventory/' : '/',
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
 });
