@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -5,9 +6,11 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;
+  font-family: 'JetBrains Mono', monospace;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

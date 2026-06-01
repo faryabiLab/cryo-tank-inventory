@@ -7,8 +7,13 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import '~/auth/amplifyConfig';
 import type { Route } from "./+types/root";
 import "./app.css";
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+import { CellLinesProvider } from "./context/CellLinesContext";
+import { BoxesProvider } from "./context/BoxesContext";
+import { VialsProvider } from "./context/VialsContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,6 +34,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            var path = new URLSearchParams(window.location.search).get('path');
+            if (path) window.history.replaceState(null, '', '/cryo-tank-inventory' + path);
+          `
+        }} />
         <Meta />
         <Links />
       </head>
@@ -41,8 +52,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function AppProviders({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return null; // or a fullscreen spinner
+
+  if (!user) return <>{children}</>;
+
+  return (
+    <CellLinesProvider>
+      <BoxesProvider>
+        <VialsProvider>
+          {children}
+        </VialsProvider>
+      </BoxesProvider>
+    </CellLinesProvider>
+  );
+}
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <AppProviders>
+        <Outlet />
+      </AppProviders>
+    </AuthProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
