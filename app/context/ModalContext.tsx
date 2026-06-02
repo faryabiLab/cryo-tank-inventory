@@ -7,6 +7,7 @@ type ModalType =
   | "DELETE_BOX"
   | "ADD_VIAL"
   | "EDIT_VIAL"
+  | "LOGOUT"
   | null;
 
 type ModalState = {
