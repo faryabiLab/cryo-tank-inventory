@@ -3,7 +3,7 @@ import { speciesTagColorMap, growthTagColorMap, diseaseTagColor, tissueTagColor 
 import { hexToRgba } from "~/utils/helpers";
 import type { ICellLine } from "~/utils/interfaces";
 
-// Single Cell Line Component
+// Single Cell Line Item
 const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
   return (
     <div className="flex flex-row bg-[#0f1624] border border-[#1e2d47] rounded-lg gap-2.5 px-4 py-2">
