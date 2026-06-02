@@ -100,6 +100,7 @@ const BoxItem: React.FC<{
 
   useEffect(() => {
     setBoxGrid(buildBoxGrid(box, boxVials, cellLineMap));
+    if(box.name !== boxName) setBoxName(box.name);
   }, [box, allVials]);
 
   const totalCells = box.rows * box.columns;
