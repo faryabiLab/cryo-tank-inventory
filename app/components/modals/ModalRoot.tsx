@@ -6,6 +6,7 @@ import ArchiveBoxModal from "./ArchiveBoxModal";
 import DeleteBoxModal from "./DeleteBoxModal";
 import AddVialModal from "./AddVialModal";
 import EditVialModal from "./EditVialModal";
+import LogoutModal from "./LogoutModal";
 
 export default function ModalRoot() {
   const { modal, closeModal } = useModal();
@@ -32,6 +33,9 @@ export default function ModalRoot() {
       )}
       {modal.type === "EDIT_VIAL" && (
         <EditVialModal data={modal.data} onClose={closeModal} />
+      )}
+      {modal.type === "LOGOUT" && (
+        <LogoutModal onClose={closeModal} />
       )}
     </div>
   );
