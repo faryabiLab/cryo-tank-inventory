@@ -2,8 +2,7 @@
 
 A laboratory inventory management app made at Upenn (Faryabi Lab) for tracking liquid nitrogen storage — boxes, vials, and cell lines — for individual lab members.
 
-<img width="1320" height="797" alt="Inventory page" src="https://github.com/user-attachments/assets/0bea1ebb-9bd8-45a6-b1fa-effe47e588e1" />
-
+<img width="1462" height="960" alt="inventory page" src="https://github.com/user-attachments/assets/65d33717-8969-4900-881d-5ebdac5fab70" />
 
 ## Overview
 
@@ -24,12 +23,16 @@ Cryo Tank Inventory lets lab members organize their cryogenic storage digitally.
 - Mark boxes as `Main Tank` or `Essential Storage`
 - Inline name editing
 
+https://github.com/user-attachments/assets/2c937a09-af77-4564-94b1-0a4477578de3
+
 ### Vials
 - Add vials to specific positions within a box
 - Position conflict prevention (no two vials in the same slot)
 - Optional vial naming
 - Each vial derives its color from its cell line
 - Cascade deletion — deleting a box removes its vials
+
+https://github.com/user-attachments/assets/3cd9873f-73ed-4222-af12-5bb814e3954a
 
 ### Cell Lines
 - Shared across all users as reference data
