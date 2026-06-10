@@ -268,7 +268,7 @@ const ControlMenu: React.FC<{
       {/* <img src="/icons/search.svg" alt="search-icon" className="w-6 h-6"/> */}
       <input
         type="search"
-        className="bg-[#161f30] text-[12px] w-64 h-8 rounded-md border border-[#1e2d47] px-4"
+        className="bg-[#161f30] text-[12px] text-white w-64 h-8 rounded-md border border-[#1e2d47] px-4"
         value={searchValue}
         onChange={handleSearchChange}
         placeholder="Search cell line"

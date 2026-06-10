@@ -9,7 +9,7 @@ const CellItem: React.FC<{cell: ICellLine}> = ({cell}) => {
     <div className="flex flex-row bg-[#0f1624] border border-[#1e2d47] rounded-lg gap-2.5 px-4 py-2">
       <div className="aspect-square h-2.5 mt-1 rounded-xs" style={{backgroundColor: cell.color || 'white'}} />
       <div className="flex flex-col gap-1">
-        <p className="text-[12px]">{cell.name}</p>
+        <p className="text-[12px] text-white">{cell.name}</p>
         <p className="text-[11px] text-[#8da0bb]">{cell.description}</p>
         {/* Tags */}
         <div className="flex flex-row flex-wrap gap-2">
