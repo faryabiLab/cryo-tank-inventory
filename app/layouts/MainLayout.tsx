@@ -22,7 +22,7 @@ export default function MainLayout() {
 
   return (
     <ModalProvider>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-[#080c14]">
         <Header
           isEditMode={isEditMode}
           paintMode={paintMode}
