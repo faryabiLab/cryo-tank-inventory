@@ -50,6 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const { isSignedIn } = await signIn({ username: email, password });
     if (isSignedIn) await loadUser();
+    else throw new Error("Your account hasn't been activated yet. Reach out to your administrator to get access.");
   };
 
   const logout = async () => {
