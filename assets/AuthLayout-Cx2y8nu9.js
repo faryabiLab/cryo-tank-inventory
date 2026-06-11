@@ -1,0 +1,1 @@
+import{w as e,x as o,a as r,p as u,O as n}from"./chunk-UVKPFVEO-D2OM0yLm.js";import{t as i}from"./AuthContext-CK_-JyG7.js";import"./fetchAuthSession-FpB-ZJyY.js";const l=e(function(){const{user:t,loading:s}=i(),a=o();return r.useEffect(()=>{!s&&t&&a("/",{replace:!0})},[t,s]),s||t?null:u.jsx(n,{})});export{l as default};
